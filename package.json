@@ -9,6 +9,7 @@
     "start": "NODE_ENV=production bun src/index.ts"
   },
   "dependencies": {
+    "prettier": "^3.8.3",
     "react": "^19",
     "react-dom": "^19"
   },
