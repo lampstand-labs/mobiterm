@@ -3,15 +3,15 @@ import "@xterm/xterm/css/xterm.css";
 import { useEffect, useRef } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { AttachAddon } from "@xterm/addon-attach";
 import { useVisualViewport } from "./useVisualViewport";
 import { useTouchScroll } from "./useTouchScroll";
+import { useWebSocket } from "./useWebSocket";
 
 export function Terminal() {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>(null);
   const fitAddonRef = useRef<FitAddon>(null);
-  const wsRef = useRef<WebSocket>(null);
+  const wsRef = useWebSocket(terminalRef, fitAddonRef);
   const viewportHeight = useVisualViewport();
   const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);
 
@@ -28,60 +28,18 @@ export function Terminal() {
     terminalRef.current.loadAddon(fitAddonRef.current);
     terminalRef.current.open(containerRef.current);
 
-    const protocol = `${location.protocol === "https:" ? "wss" : "ws"}`;
-    let attachAddon: AttachAddon | null = null;
-
-    function connect() {
-      if (
-        wsRef.current?.readyState === WebSocket.OPEN ||
-        wsRef.current?.readyState === WebSocket.CONNECTING
-      ) {
-        return;
-      }
-
-      wsRef.current = new WebSocket(`${protocol}://${location.host}/ws`);
-      wsRef.current.binaryType = "arraybuffer";
-
-      wsRef.current.onopen = () => {
-        attachAddon = new AttachAddon(wsRef.current);
-        terminalRef.current?.loadAddon(attachAddon);
-        doFit();
-      };
-
-      wsRef.current.onclose = () => {
-        terminalRef.current.write(
-          "\r\n\x1b[33mConnection closed. Reconnecting...\x1b[0m",
-        );
-        setTimeout(connect, 2000);
-      };
-
-      wsRef.current.onerror = () => {
-        wsRef.current.close();
-      };
-    }
-
-    connect();
-
     return () => {
-      attachAddon?.dispose();
-      if (wsRef.current?.readyState === WebSocket.OPEN) {
-        wsRef.current.close();
-      }
       fitAddonRef.current?.dispose();
       terminalRef.current?.dispose();
     };
   }, []);
 
-  const doFit = () => {
+  useEffect(() => {
     fitAddonRef.current?.fit();
     const { cols, rows } = terminalRef.current;
     if (cols && rows && wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
     }
-  };
-
-  useEffect(() => {
-    doFit();
   }, [viewportHeight]);
 
   return (

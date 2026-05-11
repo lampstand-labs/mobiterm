@@ -1,0 +1,67 @@
+import { useEffect, useRef } from "react";
+import type { Terminal as XTerm } from "@xterm/xterm";
+import type { FitAddon } from "@xterm/addon-fit";
+import { AttachAddon } from "@xterm/addon-attach";
+
+export function useWebSocket(
+  terminalRef: React.RefObject<XTerm>,
+  fitAddonRef: React.RefObject<FitAddon>,
+) {
+  const wsRef = useRef<WebSocket>(null);
+  const protocol = `${location.protocol === "https:" ? "wss" : "ws"}`;
+
+  useEffect(() => {
+    if (!terminalRef.current) return;
+
+    let attachAddon: AttachAddon | null = null;
+
+    const connect = () => {
+      if (
+        wsRef.current?.readyState === WebSocket.OPEN ||
+        wsRef.current?.readyState === WebSocket.CONNECTING
+      ) {
+        return;
+      }
+
+      wsRef.current = new WebSocket(`${protocol}://${location.host}/ws`);
+      wsRef.current.binaryType = "arraybuffer";
+
+      wsRef.current.onopen = () => {
+        if (terminalRef.current) {
+          attachAddon = new AttachAddon(wsRef.current!);
+          terminalRef.current.loadAddon(attachAddon);
+          // perform initial fit
+          if (fitAddonRef.current) {
+            fitAddonRef.current.fit();
+            const { cols, rows } = terminalRef.current;
+            if (cols && rows) {
+              wsRef.current!.send(`\x1b[RESIZE:${cols};${rows}]`);
+            }
+          }
+        }
+      };
+
+      wsRef.current.onclose = () => {
+        terminalRef.current?.write(
+          "\r\n\x1b[33mConnection closed. Reconnecting...\x1b[0m",
+        );
+        setTimeout(connect, 2000);
+      };
+
+      wsRef.current.onerror = () => {
+        wsRef.current?.close();
+      };
+    };
+
+    connect();
+
+    return () => {
+      attachAddon?.dispose();
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.close();
+      }
+    };
+  }, [terminalRef, fitAddonRef]);
+
+  return wsRef;
+}
