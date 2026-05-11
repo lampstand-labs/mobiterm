@@ -19,7 +19,7 @@ const server = serve({
       console.log("Client connected. Spawning shell...");
 
       // 1. Spawn the process with a terminal attached
-      const proc = Bun.spawn(["bash"], {
+      const proc = Bun.spawn(["tmux", "new", "-A", "-s", "dev"], {
         terminal: {
           data(terminal, data) {
             // 2. Forward process output to the WebSocket client
