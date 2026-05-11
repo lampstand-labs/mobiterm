@@ -5,6 +5,7 @@ import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { AttachAddon } from "@xterm/addon-attach";
 import { useVisualViewport } from "./useVisualViewport";
+import { useTouchScroll } from "./useTouchScroll";
 
 export function Terminal() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,7 @@ export function Terminal() {
   const fitAddonRef = useRef<FitAddon>(null);
   const wsRef = useRef<WebSocket>(null);
   const viewportHeight = useVisualViewport();
+  const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -82,5 +84,12 @@ export function Terminal() {
     doFit();
   }, [viewportHeight]);
 
-  return <div ref={containerRef} style={{ height: `${viewportHeight}px` }} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{ height: `${viewportHeight}px` }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+    />
+  );
 }
