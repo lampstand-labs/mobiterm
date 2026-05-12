@@ -1,4 +1,4 @@
-import { StandardButton, ToggleButton } from "./buttons";
+import { StandardButton, ToggleButton, ArrowButton } from "./buttons";
 
 interface ButtonBarProps {
   onStandardClick: (data: string) => void;
@@ -19,6 +19,16 @@ export function ButtonBar({
         label="Ctrl"
         setActive={setActiveCtrl}
         isActive={isActiveCtrl}
+      />
+      <ArrowButton
+        onArrow={onStandardClick}
+        arrows={{
+          up: { char: "↑", seq: "\x1b[A" },
+          down: { char: "↓", seq: "\x1b[B" },
+          left: { char: "←", seq: "\x1b[D" },
+          right: { char: "→", seq: "\x1b[C" },
+        }}
+        repeatEnabled={true}
       />
     </div>
   );

@@ -63,3 +63,42 @@ body,
   background: #264f78;
   color: #fff;
 }
+
+.button-bar button.arrow-button {
+  position: relative;
+}
+
+.button-bar button.arrow-button .arrow {
+  position: absolute;
+}
+
+.button-bar button.arrow-button .arrow.up {
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.button-bar button.arrow-button .arrow.down {
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.button-bar button.arrow-button .arrow.left {
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.button-bar button.arrow-button .arrow.right {
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.button-bar button.arrow-button .arrow.active {
+  color: #fff;
+  background: #264f78;
+  border-radius: 4px;
+  padding: 2px;
+}
