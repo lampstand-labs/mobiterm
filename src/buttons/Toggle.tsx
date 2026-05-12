@@ -4,12 +4,14 @@ interface ToggleButtonProps {
   label: string;
   setActive: (state: boolean) => void;
   isActive: boolean;
+  onHoldChange?: (isHeld: boolean) => void;
 }
 
 export function ToggleButton({
   label,
   setActive,
   isActive,
+  onHoldChange,
 }: ToggleButtonProps) {
   const startRef = useRef(null);
 
@@ -17,6 +19,7 @@ export function ToggleButton({
     e.preventDefault();
     startRef.current = Date.now();
     setActive(!isActive);
+    onHoldChange?.(true);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
@@ -28,7 +31,6 @@ export function ToggleButton({
       e.clientY <= rect.bottom;
     if (!isInside) {
       setActive(false);
-      return;
     }
 
     if (startRef.current) {
@@ -38,6 +40,8 @@ export function ToggleButton({
       }
       startRef.current = null;
     }
+
+    onHoldChange?.(false);
   };
 
   return (

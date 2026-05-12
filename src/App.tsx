@@ -9,6 +9,7 @@ export function App() {
   const viewportHeight = useVisualViewport();
   const terminalRef = useRef(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
+  const [isCtrlHeld, setCtrlHeld] = useState(false);
 
   const standardHandler = useCallback((data: string) => {
     terminalRef.current?.send(data);
@@ -20,11 +21,13 @@ export function App() {
         ref={terminalRef}
         isLatchedCtrl={isLatchedCtrl}
         setLatchedCtrl={setLatchedCtrl}
+        isCtrlHeld={isCtrlHeld}
       />
       <ButtonBar
         onStandardClick={standardHandler}
         setActiveCtrl={setLatchedCtrl}
         isActiveCtrl={isLatchedCtrl}
+        onCtrlHoldChange={setCtrlHeld}
       />
     </div>
   );

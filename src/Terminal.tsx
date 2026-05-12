@@ -11,10 +11,12 @@ export function Terminal({
   ref,
   isLatchedCtrl,
   setLatchedCtrl,
+  isCtrlHeld,
 }: {
   ref: any;
   isLatchedCtrl: boolean;
   setLatchedCtrl: (state: boolean) => void;
+  isCtrlHeld: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>(null);
@@ -24,6 +26,7 @@ export function Terminal({
     fitAddonRef,
     isLatchedCtrl,
     setLatchedCtrl,
+    isCtrlHeld,
   );
   const viewportHeight = useVisualViewport();
   const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);

@@ -8,14 +8,20 @@ export function useWebSocket(
   fitAddonRef: React.RefObject<FitAddon>,
   isLatchedCtrl: boolean,
   setLatchedCtrl: (state: boolean) => void,
+  isCtrlHeld: boolean,
 ) {
   const wsRef = useRef<WebSocket>(null);
   const ctrlLatchedRef = useRef(isLatchedCtrl);
+  const ctrlHeldRef = useRef(isCtrlHeld);
   const protocol = `${location.protocol === "https:" ? "wss" : "ws"}`;
 
   useEffect(() => {
     ctrlLatchedRef.current = isLatchedCtrl;
   }, [isLatchedCtrl]);
+
+  useEffect(() => {
+    ctrlHeldRef.current = isCtrlHeld;
+  }, [isCtrlHeld]);
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -39,7 +45,9 @@ export function useWebSocket(
           const m = data.match(/^([a-zA-Z])$/);
           if (m) {
             data = String.fromCharCode(m[1].charCodeAt(0) & 0x1f);
-            setLatchedCtrl(false);
+            if (!ctrlHeldRef.current) {
+              setLatchedCtrl(false);
+            }
           }
         }
         originalSend.call(this, data);

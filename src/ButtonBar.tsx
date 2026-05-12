@@ -4,12 +4,14 @@ interface ButtonBarProps {
   onStandardClick: (data: string) => void;
   setActiveCtrl: (state: boolean) => void;
   isActiveCtrl: boolean;
+  onCtrlHoldChange?: (isHeld: boolean) => void;
 }
 
 export function ButtonBar({
   onStandardClick,
   setActiveCtrl,
   isActiveCtrl,
+  onCtrlHoldChange,
 }: ButtonBarProps) {
   return (
     <div className="button-bar">
@@ -19,6 +21,7 @@ export function ButtonBar({
         label="Ctrl"
         setActive={setActiveCtrl}
         isActive={isActiveCtrl}
+        onHoldChange={onCtrlHoldChange}
       />
       <ArrowButton
         onArrow={onStandardClick}
