@@ -16,6 +16,8 @@ interface TerminalProps {
 
 export interface TerminalHandle {
   send: (message: string) => void;
+  fit: () => void;
+  focus: () => void;
 }
 
 export function Terminal({
@@ -56,15 +58,18 @@ export function Terminal({
     };
   }, []);
 
-  useEffect(() => {
+  const doFit = () => {
     requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
       fitAddonRef.current?.fit();
       const { cols, rows } = terminalRef.current;
       if (cols && rows && wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
       }
     });
-  }, [viewportHeight]);
+  };
+
+  useEffect(doFit, [viewportHeight]);
 
   useImperativeHandle(
     ref,
@@ -72,6 +77,8 @@ export function Terminal({
       send: (message: string) => {
         wsRef.current?.send(message);
       },
+      fit: doFit,
+      focus: () => terminalRef.current?.focus(),
     }),
     [],
   );

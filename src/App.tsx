@@ -15,6 +15,14 @@ export function App() {
     terminalRef.current?.send(data);
   }, []);
 
+  const fitTerminal = useCallback(() => {
+    terminalRef.current?.fit();
+  }, []);
+
+  const focusTerminal = useCallback(() => {
+    terminalRef.current?.focus();
+  }, []);
+
   return (
     <div className="app" style={{ height: `${viewportHeight}px` }}>
       <Terminal
@@ -28,6 +36,8 @@ export function App() {
         setActiveCtrl={setLatchedCtrl}
         isActiveCtrl={isLatchedCtrl}
         onCtrlHoldChange={setCtrlHeld}
+        fitTerminal={fitTerminal}
+        focusTerminal={focusTerminal}
       />
     </div>
   );
