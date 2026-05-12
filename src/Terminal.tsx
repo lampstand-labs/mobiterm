@@ -1,13 +1,13 @@
 import "@xterm/xterm/css/xterm.css";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useImperativeHandle } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { useVisualViewport } from "./useVisualViewport";
 import { useTouchScroll } from "./useTouchScroll";
 import { useWebSocket } from "./useWebSocket";
 
-export function Terminal() {
+export function Terminal({ ref }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>(null);
   const fitAddonRef = useRef<FitAddon>(null);
@@ -35,17 +35,29 @@ export function Terminal() {
   }, []);
 
   useEffect(() => {
-    fitAddonRef.current?.fit();
-    const { cols, rows } = terminalRef.current;
-    if (cols && rows && wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
-    }
+    requestAnimationFrame(() => {
+      fitAddonRef.current?.fit();
+      const { cols, rows } = terminalRef.current;
+      if (cols && rows && wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
+      }
+    });
   }, [viewportHeight]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      send: (message: string) => {
+        wsRef.current?.send(message);
+      },
+    }),
+    [],
+  );
 
   return (
     <div
       ref={containerRef}
-      style={{ height: `${viewportHeight}px` }}
+      className="container-terminal"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
     />

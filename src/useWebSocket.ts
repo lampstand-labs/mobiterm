@@ -26,6 +26,11 @@ export function useWebSocket(
       wsRef.current = new WebSocket(`${protocol}://${location.host}/ws`);
       wsRef.current.binaryType = "arraybuffer";
 
+      const originalSend = wsRef.current.send;
+      wsRef.current.send = function (data) {
+        originalSend.call(this, data);
+      };
+
       wsRef.current.onopen = () => {
         if (terminalRef.current) {
           attachAddon = new AttachAddon(wsRef.current!);
