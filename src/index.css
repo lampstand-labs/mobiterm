@@ -38,7 +38,7 @@ body,
 
 .button-bar button {
   flex: 1;
-  min-height: 48px;
+  min-height: 44px;
   border: none;
   border-right: 1px solid #333;
   background: #2d2d2d;

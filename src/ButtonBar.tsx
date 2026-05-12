@@ -52,6 +52,13 @@ export function ButtonBar({
           }}
           repeatEnabled={true}
         />
+        <ArrowButton
+          onArrow={onStandardClick}
+          arrows={{
+            left: { char: "◀", seq: "\x02p" },
+            right: { char: "▶", seq: "\x02n" },
+          }}
+        />
         <button
           onPointerDown={(e) => e.preventDefault()}
           className={showInput ? "toggle-active" : undefined}
