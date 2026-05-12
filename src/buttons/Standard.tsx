@@ -1,4 +1,4 @@
-import React from "react";
+import { type PointerEvent } from "react";
 
 interface StandardButtonProps {
   label: string;
@@ -6,7 +6,7 @@ interface StandardButtonProps {
 }
 
 export function StandardButton({ label, onClick }: StandardButtonProps) {
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = (e: PointerEvent) => {
     e.preventDefault();
   };
 

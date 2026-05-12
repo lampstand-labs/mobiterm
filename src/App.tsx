@@ -1,13 +1,13 @@
 import "./index.css";
 
 import { useRef, useCallback, useState } from "react";
-import { Terminal } from "./Terminal";
+import { Terminal, type TerminalHandle } from "./Terminal";
 import { ButtonBar } from "./ButtonBar";
 import { useVisualViewport } from "./useVisualViewport";
 
 export function App() {
   const viewportHeight = useVisualViewport();
-  const terminalRef = useRef(null);
+  const terminalRef = useRef<TerminalHandle | null>(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
 

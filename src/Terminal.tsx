@@ -1,23 +1,29 @@
 import "@xterm/xterm/css/xterm.css";
 
-import { useEffect, useRef, useImperativeHandle } from "react";
+import { useEffect, useRef, useImperativeHandle, type Ref } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { useVisualViewport } from "./useVisualViewport";
 import { useTouchScroll } from "./useTouchScroll";
 import { useWebSocket } from "./useWebSocket";
 
+interface TerminalProps {
+  ref: Ref<TerminalHandle>;
+  isLatchedCtrl: boolean;
+  setLatchedCtrl: (state: boolean) => void;
+  isCtrlHeld: boolean;
+}
+
+export interface TerminalHandle {
+  send: (message: string) => void;
+}
+
 export function Terminal({
   ref,
   isLatchedCtrl,
   setLatchedCtrl,
   isCtrlHeld,
-}: {
-  ref: any;
-  isLatchedCtrl: boolean;
-  setLatchedCtrl: (state: boolean) => void;
-  isCtrlHeld: boolean;
-}) {
+}: TerminalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>(null);
   const fitAddonRef = useRef<FitAddon>(null);

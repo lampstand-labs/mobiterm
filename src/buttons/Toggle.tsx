@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef, type PointerEvent } from "react";
 
 interface ToggleButtonProps {
   label: string;
@@ -13,16 +13,16 @@ export function ToggleButton({
   isActive,
   onHoldChange,
 }: ToggleButtonProps) {
-  const startRef = useRef(null);
+  const startRef = useRef<number | null>(null);
 
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = (e: PointerEvent) => {
     e.preventDefault();
     startRef.current = Date.now();
     setActive(!isActive);
     onHoldChange?.(true);
   };
 
-  const handlePointerUp = (e: React.PointerEvent) => {
+  const handlePointerUp = (e: PointerEvent) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const isInside =
       e.clientX >= rect.left &&

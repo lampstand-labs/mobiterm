@@ -1,11 +1,17 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  type PointerEvent,
+} from "react";
 
 /**
  * ArrowButton - a swipeable directional button.
  * Emits terminal arrow escape sequences when a direction is selected.
  * Supports mouse and touch dragging to choose direction and auto-repeat on hold.
  */
-export interface ArrowButtonProps {
+interface ArrowButtonProps {
   /** Callback receiving the escape sequence for the selected arrow direction */
   onArrow: (seq: string) => void;
   /** Enable auto-repeat on press and hold (default: false) */
@@ -19,11 +25,11 @@ export interface ArrowButtonProps {
   };
 }
 
-export const ArrowButton: React.FC<ArrowButtonProps> = ({
+export function ArrowButton({
   onArrow,
   repeatEnabled = false,
   arrows = {},
-}) => {
+}: ArrowButtonProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
   const repeatTimer = useRef<NodeJS.Timeout | null>(null);
@@ -85,17 +91,17 @@ export const ArrowButton: React.FC<ArrowButtonProps> = ({
   };
 
   // Pointer event handlers (covers mouse, touch, stylus)
-  const onPointerDown = (e: React.PointerEvent) => {
+  const onPointerDown = (e: PointerEvent) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     startTracking(e.clientX, e.clientY);
   };
 
-  const onPointerMove = (e: React.PointerEvent) => {
+  const onPointerMove = (e: PointerEvent) => {
     if (e.buttons === 0) return; // ignore when not pressed
     moveTracking(e.clientX, e.clientY);
   };
 
-  const onPointerUp = (e: React.PointerEvent) => {
+  const onPointerUp = (e: PointerEvent) => {
     e.currentTarget.releasePointerCapture(e.pointerId);
     endTracking();
   };
@@ -136,4 +142,4 @@ export const ArrowButton: React.FC<ArrowButtonProps> = ({
       )}
     </button>
   );
-};
+}

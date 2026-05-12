@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { Terminal as XTerm } from "@xterm/xterm";
-import type { FitAddon } from "@xterm/addon-fit";
+import { type Terminal as XTerm } from "@xterm/xterm";
+import { type FitAddon } from "@xterm/addon-fit";
 import { AttachAddon } from "@xterm/addon-attach";
 
 export function useWebSocket(
