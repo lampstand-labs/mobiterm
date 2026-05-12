@@ -16,7 +16,11 @@ export function App() {
 
   return (
     <div className="app" style={{ height: `${viewportHeight}px` }}>
-      <Terminal ref={terminalRef} />
+      <Terminal
+        ref={terminalRef}
+        isLatchedCtrl={isLatchedCtrl}
+        setLatchedCtrl={setLatchedCtrl}
+      />
       <ButtonBar
         onStandardClick={standardHandler}
         setActiveCtrl={setLatchedCtrl}

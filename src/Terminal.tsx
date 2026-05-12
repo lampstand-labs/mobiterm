@@ -7,11 +7,24 @@ import { useVisualViewport } from "./useVisualViewport";
 import { useTouchScroll } from "./useTouchScroll";
 import { useWebSocket } from "./useWebSocket";
 
-export function Terminal({ ref }) {
+export function Terminal({
+  ref,
+  isLatchedCtrl,
+  setLatchedCtrl,
+}: {
+  ref: any;
+  isLatchedCtrl: boolean;
+  setLatchedCtrl: (state: boolean) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<XTerm>(null);
   const fitAddonRef = useRef<FitAddon>(null);
-  const wsRef = useWebSocket(terminalRef, fitAddonRef);
+  const wsRef = useWebSocket(
+    terminalRef,
+    fitAddonRef,
+    isLatchedCtrl,
+    setLatchedCtrl,
+  );
   const viewportHeight = useVisualViewport();
   const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);
 

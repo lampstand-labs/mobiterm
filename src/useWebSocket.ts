@@ -6,9 +6,16 @@ import { AttachAddon } from "@xterm/addon-attach";
 export function useWebSocket(
   terminalRef: React.RefObject<XTerm>,
   fitAddonRef: React.RefObject<FitAddon>,
+  isLatchedCtrl: boolean,
+  setLatchedCtrl: (state: boolean) => void,
 ) {
   const wsRef = useRef<WebSocket>(null);
+  const ctrlLatchedRef = useRef(isLatchedCtrl);
   const protocol = `${location.protocol === "https:" ? "wss" : "ws"}`;
+
+  useEffect(() => {
+    ctrlLatchedRef.current = isLatchedCtrl;
+  }, [isLatchedCtrl]);
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -28,6 +35,13 @@ export function useWebSocket(
 
       const originalSend = wsRef.current.send;
       wsRef.current.send = function (data) {
+        if (ctrlLatchedRef.current && typeof data === "string") {
+          const m = data.match(/^([a-zA-Z])$/);
+          if (m) {
+            data = String.fromCharCode(m[1].charCodeAt(0) & 0x1f);
+            setLatchedCtrl(false);
+          }
+        }
         originalSend.call(this, data);
       };
 
