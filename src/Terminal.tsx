@@ -51,6 +51,7 @@ export function Terminal({
       theme: { background: "#1e1e1e" },
       overviewRuler: { width: 1 }, // replace with showScrollbar in 7.0.0 and remove css
       fontSize: 12,
+      macOptionClickForcesSelection: true,
     });
     fitAddonRef.current = new FitAddon();
 
