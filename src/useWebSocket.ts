@@ -27,8 +27,10 @@ export function useWebSocket(
     if (!terminalRef.current) return;
 
     let attachAddon: AttachAddon | null = null;
+    let disposed = false;
 
     const connect = () => {
+      if (disposed) return;
       if (
         wsRef.current?.readyState === WebSocket.OPEN ||
         wsRef.current?.readyState === WebSocket.CONNECTING
@@ -69,10 +71,14 @@ export function useWebSocket(
       };
 
       wsRef.current.onclose = () => {
+        attachAddon?.dispose();
+        attachAddon = null;
         terminalRef.current?.write(
           "\r\n\x1b[33mConnection closed. Reconnecting...\x1b[0m",
         );
-        setTimeout(connect, 2000);
+        if (!disposed) {
+          setTimeout(connect, 2000);
+        }
       };
 
       wsRef.current.onerror = () => {
@@ -83,6 +89,7 @@ export function useWebSocket(
     connect();
 
     return () => {
+      disposed = true;
       attachAddon?.dispose();
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.close();

@@ -18,7 +18,7 @@ export const LatchButton = memo(function LatchButton({
   const handlePointerDown = (e: PointerEvent) => {
     e.preventDefault();
     startRef.current = Date.now();
-    setActive(!isActive);
+    setActive((v) => !v);
     onHoldChange?.(true);
   };
 
@@ -44,10 +44,16 @@ export const LatchButton = memo(function LatchButton({
     onHoldChange?.(false);
   };
 
+  const handlePointerCancel = () => {
+    startRef.current = null;
+    onHoldChange?.(false);
+  };
+
   return (
     <button
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       className={isActive ? "toggle-active" : undefined}
     >
       {label}

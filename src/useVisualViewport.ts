@@ -11,6 +11,7 @@ export function useVisualViewport() {
     };
 
     window.visualViewport.addEventListener("resize", handleResize);
+    handleResize();
 
     return () =>
       window.visualViewport.removeEventListener("resize", handleResize);

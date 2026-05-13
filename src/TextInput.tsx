@@ -24,10 +24,8 @@ export function TextInput({ onSend, fitTerminal }: TextInputProps) {
   }, [inputValue]);
 
   const handleSend = () => {
-    if (inputValue) {
-      onSend(inputValue + "\r");
-      setInputValue("");
-    }
+    onSend(inputValue + "\r");
+    setInputValue("");
   };
 
   return (

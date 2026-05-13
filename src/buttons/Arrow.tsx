@@ -76,7 +76,7 @@ export const ArrowButton = memo(function ArrowButton({
       setDirection(dir);
       sendDirection(dir);
       // start auto-repeat after initial delay
-      if (repeatTimer.current) clearTimeout(repeatTimer.current);
+      if (repeatTimer.current) clearInterval(repeatTimer.current);
       if (repeatEnabled) {
         repeatTimer.current = setInterval(() => sendDirection(dir), 150);
       }
@@ -104,6 +104,10 @@ export const ArrowButton = memo(function ArrowButton({
     endTracking();
   };
 
+  const onPointerCancel = () => {
+    endTracking();
+  };
+
   // Cleanup on unmount
   useEffect(() => {
     return () => clearTimers();
@@ -116,6 +120,7 @@ export const ArrowButton = memo(function ArrowButton({
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
     >
       {/* Four overlay arrows */}
       {arrows.up?.char && (
