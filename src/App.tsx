@@ -2,7 +2,7 @@ import "./index.css";
 
 import { useRef, useCallback, useState } from "react";
 import { Terminal, type TerminalHandle } from "./Terminal";
-import { ButtonBar } from "./ButtonBar";
+import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
 
 export function App() {
@@ -31,7 +31,7 @@ export function App() {
         setLatchedCtrl={setLatchedCtrl}
         isCtrlHeld={isCtrlHeld}
       />
-      <ButtonBar
+      <ToolBar
         onStandardClick={standardHandler}
         setActiveCtrl={setLatchedCtrl}
         isActiveCtrl={isLatchedCtrl}

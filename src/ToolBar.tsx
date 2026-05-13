@@ -7,7 +7,7 @@ import {
 } from "./buttons";
 import { TextInput } from "./TextInput";
 
-interface ButtonBarProps {
+interface ToolBarProps {
   onStandardClick: (data: string) => void;
   setActiveCtrl: (state: boolean) => void;
   isActiveCtrl: boolean;
@@ -23,14 +23,14 @@ const extraButtons = [
   { label: "↵", seq: "\r" },
 ];
 
-export function ButtonBar({
+export function ToolBar({
   onStandardClick,
   setActiveCtrl,
   isActiveCtrl,
   onCtrlHoldChange,
   fitTerminal,
   focusTerminal,
-}: ButtonBarProps) {
+}: ToolBarProps) {
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
 
