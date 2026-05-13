@@ -1,11 +1,5 @@
-import {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  memo,
-  type PointerEvent,
-} from "react";
+import { useRef, useState, useEffect, useCallback, memo } from "react";
+import type { PointerEvent } from "react";
 
 /**
  * ArrowButton - a swipeable directional button.

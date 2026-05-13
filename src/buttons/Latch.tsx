@@ -1,10 +1,5 @@
-import {
-  useRef,
-  memo,
-  type PointerEvent,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useRef, memo } from "react";
+import type { PointerEvent, Dispatch, SetStateAction } from "react";
 
 interface LatchButtonProps {
   label: string;

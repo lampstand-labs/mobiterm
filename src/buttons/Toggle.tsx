@@ -1,4 +1,5 @@
-import { type PointerEvent, memo } from "react";
+import { memo } from "react";
+import type { PointerEvent } from "react";
 
 interface ToggleButtonProps {
   label: string;

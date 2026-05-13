@@ -1,4 +1,5 @@
-import { useRef, type TouchEvent } from "react";
+import { useRef } from "react";
+import type { TouchEvent } from "react";
 import type { Terminal as XTerm } from "@xterm/xterm";
 
 export function useTouchScroll(

@@ -1,12 +1,7 @@
 import "@xterm/xterm/css/xterm.css";
 
-import {
-  useEffect,
-  useRef,
-  useCallback,
-  useImperativeHandle,
-  type Ref,
-} from "react";
+import { useEffect, useRef, useCallback, useImperativeHandle } from "react";
+import type { Ref } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { useTouchScroll } from "./useTouchScroll";

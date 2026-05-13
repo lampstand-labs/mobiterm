@@ -1,7 +1,8 @@
 import "./index.css";
 
 import { useRef, useCallback, useState } from "react";
-import { Terminal, type TerminalHandle } from "./Terminal";
+import { Terminal } from "./Terminal";
+import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
 
