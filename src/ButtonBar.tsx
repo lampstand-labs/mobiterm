@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { StandardButton, LatchButton, ArrowButton } from "./buttons";
+import {
+  StandardButton,
+  LatchButton,
+  ArrowButton,
+  ToggleButton,
+} from "./buttons";
 import { TextInput } from "./TextInput";
 
 interface ButtonBarProps {
@@ -70,13 +75,11 @@ export function ButtonBar({
           }}
           repeatEnabled={true}
         />
-        <button
-          onPointerDown={(e) => e.preventDefault()}
-          className={showInput ? "toggle-active" : undefined}
+        <ToggleButton
+          label="Aa"
+          isActive={showInput}
           onClick={() => setShowInput((v) => !v)}
-        >
-          Aa
-        </button>
+        />
         <ArrowButton
           onArrow={onStandardClick}
           arrows={{
@@ -84,13 +87,11 @@ export function ButtonBar({
             right: { char: "▶", seq: "\x02n" },
           }}
         />
-        <button
-          onPointerDown={(e) => e.preventDefault()}
-          className={showExtra ? "toggle-active" : undefined}
+        <ToggleButton
+          label="…"
+          isActive={showExtra}
           onClick={() => setShowExtra((v) => !v)}
-        >
-          …
-        </button>
+        />
       </div>
     </>
   );
