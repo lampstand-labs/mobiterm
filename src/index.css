@@ -31,36 +31,49 @@ body,
   display: flex;
   flex-direction: row;
   flex-shrink: 0;
-  background: #1e1e1e;
-  border-top: 1px solid #333;
+  background: #2d2d2d;
+  border-top: 1px solid #3c3c3c;
   font-family: monospace;
+  gap: 2px;
+  padding: 6px 8px;
 }
 
 .button-bar button {
   flex: 1;
-  min-height: 44px;
+  min-height: 40px;
   border: none;
-  border-right: 1px solid #333;
-  background: #2d2d2d;
+  border-radius: 6px;
+  background: #1e1e1e;
   color: #d4d4d4;
-  font-size: 14px;
+  font-size: 13px;
   font-family: inherit;
+  font-weight: 500;
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-}
-
-.button-bar button:last-child {
-  border-right: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .button-bar button:active {
-  background: #3e3e3e;
+  background: #3c3c3c;
+  transform: scale(0.96);
+}
+
+@media (hover: hover) {
+  .button-bar button:hover {
+    background: #2a2a2a;
+  }
+  .button-bar button.toggle-active:hover {
+    background: #1177bb;
+  }
 }
 
 .button-bar button.toggle-active {
-  background: #264f78;
+  background: #0e639c;
   color: #fff;
 }
 
@@ -98,18 +111,21 @@ body,
 
 .button-bar button.arrow-button .arrow.active {
   color: #fff;
-  background: #264f78;
-  border-radius: 4px;
-  padding: 2px;
+  background: #0e639c;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font-weight: 700;
 }
 
 .text-input {
-  background: #2d2d2d;
+  background: #1e1e1e;
   color: #d4d4d4;
   border: none;
+  border-top: 1px solid #3c3c3c;
   outline: none;
   padding: 8px 8px 0 8px;
-  font-size: 12;
+  font-size: 13px;
+  font-family: monospace;
   resize: none;
   touch-action: none;
 }

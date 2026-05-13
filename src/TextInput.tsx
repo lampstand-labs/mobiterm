@@ -5,10 +5,7 @@ interface TextInputProps {
   fitTerminal: () => void;
 }
 
-export function TextInput({
-  onSend,
-  fitTerminal,
-}: TextInputProps) {
+export function TextInput({ onSend, fitTerminal }: TextInputProps) {
   const [inputValue, setInputValue] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
