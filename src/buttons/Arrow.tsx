@@ -3,6 +3,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  memo,
   type PointerEvent,
 } from "react";
 
@@ -25,7 +26,7 @@ interface ArrowButtonProps {
   };
 }
 
-export function ArrowButton({
+export const ArrowButton = memo(function ArrowButton({
   onArrow,
   repeatEnabled = false,
   arrows = {},
@@ -33,6 +34,7 @@ export function ArrowButton({
   const containerRef = useRef<HTMLDivElement>(null);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
   const repeatTimer = useRef<NodeJS.Timeout | null>(null);
+  const arrowsRef = useRef(arrows);
   const [direction, setDirection] = useState<string>(""); // "up"|"down"|"left"|"right"
 
   const clearTimers = () => {
@@ -43,13 +45,11 @@ export function ArrowButton({
 
   const sendDirection = useCallback(
     (dir: string) => {
-      // use the custom sequence if provided for the direction
-      const seq = arrows[dir as keyof typeof arrows]?.seq;
-      if (!seq) return; // no sequence defined for this direction
-      // invoke generic callback with the escape sequence
+      const seq = arrowsRef.current[dir as keyof typeof arrows]?.seq;
+      if (!seq) return;
       onArrow?.(seq);
     },
-    [onArrow, arrows],
+    [onArrow],
   );
 
   const determineDirection = (dx: number, dy: number): string => {
@@ -140,4 +140,4 @@ export function ArrowButton({
       )}
     </button>
   );
-}
+});

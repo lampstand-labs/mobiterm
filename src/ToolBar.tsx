@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import {
   StandardButton,
   LatchButton,
@@ -16,14 +16,19 @@ interface ToolBarProps {
   focusTerminal?: () => void;
 }
 
-const extraButtons = [
-  { label: "S+Tab", seq: "\x1b[Z" },
-  { label: "Space", seq: " " },
-  { label: "^C", seq: "\x03" },
-  { label: "↵", seq: "\r" },
-];
+const ARROWS = {
+  up: { char: "↑", seq: "\x1b[A" },
+  down: { char: "↓", seq: "\x1b[B" },
+  left: { char: "←", seq: "\x1b[D" },
+  right: { char: "→", seq: "\x1b[C" },
+};
 
-export function ToolBar({
+const TMUX_ARROWS = {
+  left: { char: "◀", seq: "\x02p" },
+  right: { char: "▶", seq: "\x02n" },
+};
+
+export const ToolBar = memo(function ToolBar({
   onStandardClick,
   setActiveCtrl,
   isActiveCtrl,
@@ -44,6 +49,30 @@ export function ToolBar({
     fitTerminal();
   }, [showExtra]);
 
+  const handleEsc = useCallback(
+    () => onStandardClick("\x1b"),
+    [onStandardClick],
+  );
+  const handleTab = useCallback(() => onStandardClick("\t"), [onStandardClick]);
+  const handleShiftTab = useCallback(
+    () => onStandardClick("\x1b[Z"),
+    [onStandardClick],
+  );
+  const handleSpace = useCallback(
+    () => onStandardClick(" "),
+    [onStandardClick],
+  );
+  const handleCtrlC = useCallback(
+    () => onStandardClick("\x03"),
+    [onStandardClick],
+  );
+  const handleEnter = useCallback(
+    () => onStandardClick("\r"),
+    [onStandardClick],
+  );
+  const handleToggleInput = useCallback(() => setShowInput((v) => !v), []);
+  const handleToggleExtra = useCallback(() => setShowExtra((v) => !v), []);
+
   return (
     <>
       {showInput && (
@@ -51,17 +80,15 @@ export function ToolBar({
       )}
       {showExtra && (
         <div className="button-bar">
-          {extraButtons.map((b) => (
-            <StandardButton
-              label={b.label}
-              onClick={() => onStandardClick(b.seq)}
-            />
-          ))}
+          <StandardButton label="S+Tab" onClick={handleShiftTab} />
+          <StandardButton label="Space" onClick={handleSpace} />
+          <StandardButton label="^C" onClick={handleCtrlC} />
+          <StandardButton label="↵" onClick={handleEnter} />
         </div>
       )}
       <div className="button-bar">
-        <StandardButton label="Esc" onClick={() => onStandardClick("\x1b")} />
-        <StandardButton label="Tab" onClick={() => onStandardClick("\t")} />
+        <StandardButton label="Esc" onClick={handleEsc} />
+        <StandardButton label="Tab" onClick={handleTab} />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
@@ -70,32 +97,21 @@ export function ToolBar({
         />
         <ArrowButton
           onArrow={onStandardClick}
-          arrows={{
-            up: { char: "↑", seq: "\x1b[A" },
-            down: { char: "↓", seq: "\x1b[B" },
-            left: { char: "←", seq: "\x1b[D" },
-            right: { char: "→", seq: "\x1b[C" },
-          }}
+          arrows={ARROWS}
           repeatEnabled={true}
         />
         <ToggleButton
           label="Aa"
           isActive={showInput}
-          onClick={() => setShowInput((v) => !v)}
+          onClick={handleToggleInput}
         />
-        <ArrowButton
-          onArrow={onStandardClick}
-          arrows={{
-            left: { char: "◀", seq: "\x02p" },
-            right: { char: "▶", seq: "\x02n" },
-          }}
-        />
+        <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
         <ToggleButton
           label="…"
           isActive={showExtra}
-          onClick={() => setShowExtra((v) => !v)}
+          onClick={handleToggleExtra}
         />
       </div>
     </>
   );
-}
+});

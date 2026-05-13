@@ -1,14 +1,20 @@
 import "@xterm/xterm/css/xterm.css";
 
-import { useEffect, useRef, useImperativeHandle, type Ref } from "react";
+import {
+  useEffect,
+  useRef,
+  useCallback,
+  useImperativeHandle,
+  type Ref,
+} from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { useVisualViewport } from "./useVisualViewport";
 import { useTouchScroll } from "./useTouchScroll";
 import { useWebSocket } from "./useWebSocket";
 
 interface TerminalProps {
   ref: Ref<TerminalHandle>;
+  viewportHeight: number;
   isLatchedCtrl: boolean;
   setLatchedCtrl: (state: boolean) => void;
   isCtrlHeld: boolean;
@@ -22,6 +28,7 @@ export interface TerminalHandle {
 
 export function Terminal({
   ref,
+  viewportHeight,
   isLatchedCtrl,
   setLatchedCtrl,
   isCtrlHeld,
@@ -36,7 +43,6 @@ export function Terminal({
     setLatchedCtrl,
     isCtrlHeld,
   );
-  const viewportHeight = useVisualViewport();
   const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);
 
   useEffect(() => {
@@ -58,7 +64,7 @@ export function Terminal({
     };
   }, []);
 
-  const doFit = () => {
+  const doFit = useCallback(() => {
     requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       fitAddonRef.current?.fit();
@@ -67,9 +73,9 @@ export function Terminal({
         wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
       }
     });
-  };
+  }, []);
 
-  useEffect(doFit, [viewportHeight]);
+  useEffect(doFit, [viewportHeight, doFit]);
 
   useImperativeHandle(
     ref,

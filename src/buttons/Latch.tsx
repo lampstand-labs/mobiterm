@@ -1,4 +1,4 @@
-import { useRef, type PointerEvent } from "react";
+import { useRef, memo, type PointerEvent } from "react";
 
 interface LatchButtonProps {
   label: string;
@@ -7,7 +7,7 @@ interface LatchButtonProps {
   onHoldChange?: (isHeld: boolean) => void;
 }
 
-export function LatchButton({
+export const LatchButton = memo(function LatchButton({
   label,
   setActive,
   isActive,
@@ -53,4 +53,4 @@ export function LatchButton({
       {label}
     </button>
   );
-}
+});

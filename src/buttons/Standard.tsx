@@ -1,11 +1,14 @@
-import { type PointerEvent } from "react";
+import { type PointerEvent, memo } from "react";
 
 interface StandardButtonProps {
   label: string;
   onClick: () => void;
 }
 
-export function StandardButton({ label, onClick }: StandardButtonProps) {
+export const StandardButton = memo(function StandardButton({
+  label,
+  onClick,
+}: StandardButtonProps) {
   const handlePointerDown = (e: PointerEvent) => {
     e.preventDefault();
   };
@@ -15,4 +18,4 @@ export function StandardButton({ label, onClick }: StandardButtonProps) {
       {label}
     </button>
   );
-}
+});

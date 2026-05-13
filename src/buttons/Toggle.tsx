@@ -1,4 +1,4 @@
-import { type PointerEvent } from "react";
+import { type PointerEvent, memo } from "react";
 
 interface ToggleButtonProps {
   label: string;
@@ -6,7 +6,11 @@ interface ToggleButtonProps {
   onClick: () => void;
 }
 
-export function ToggleButton({ label, isActive, onClick }: ToggleButtonProps) {
+export const ToggleButton = memo(function ToggleButton({
+  label,
+  isActive,
+  onClick,
+}: ToggleButtonProps) {
   const handlePointerDown = (e: PointerEvent) => {
     e.preventDefault();
   };
@@ -20,4 +24,4 @@ export function ToggleButton({ label, isActive, onClick }: ToggleButtonProps) {
       {label}
     </button>
   );
-}
+});

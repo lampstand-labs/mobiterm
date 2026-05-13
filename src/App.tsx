@@ -27,6 +27,7 @@ export function App() {
     <div className="app" style={{ height: `${viewportHeight}px` }}>
       <Terminal
         ref={terminalRef}
+        viewportHeight={viewportHeight}
         isLatchedCtrl={isLatchedCtrl}
         setLatchedCtrl={setLatchedCtrl}
         isCtrlHeld={isCtrlHeld}
