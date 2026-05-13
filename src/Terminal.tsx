@@ -43,7 +43,11 @@ export function Terminal({
     setLatchedCtrl,
     isCtrlHeld,
   );
-  const { handleTouchStart, handleTouchMove } = useTouchScroll(wsRef);
+  const { handleTouchStart, handleTouchMove } = useTouchScroll(
+    wsRef,
+    terminalRef,
+    containerRef,
+  );
 
   useEffect(() => {
     if (!containerRef.current) return;

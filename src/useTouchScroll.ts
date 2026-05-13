@@ -1,10 +1,41 @@
 import { useRef } from "react";
+import type { Terminal as XTerm } from "@xterm/xterm";
 
-export function useTouchScroll(wsRef: React.RefObject<WebSocket>) {
+export function useTouchScroll(
+  wsRef: React.RefObject<WebSocket | null>,
+  terminalRef: React.RefObject<XTerm | null>,
+  containerRef: React.RefObject<HTMLDivElement | null>,
+) {
   const touchStartY = useRef(0);
+  const touchStartX = useRef(0);
+
+  const getTerminalCoords = (clientX: number, clientY: number) => {
+    const term = terminalRef.current;
+    const container = containerRef.current;
+    if (!term || !container) return { x: 1, y: 1 };
+
+    // change to term.dimensions in 7.0.0
+    const dims = (term as any)._core?._renderService?.dimensions?.css?.cell;
+    if (!dims?.width || !dims?.height) {
+      return { x: 1, y: 1 };
+    }
+
+    const rect = container.getBoundingClientRect();
+    const relativeX = clientX - rect.left;
+    const relativeY = clientY - rect.top;
+
+    let x = Math.floor(relativeX / dims.width) + 1;
+    let y = Math.floor(relativeY / dims.height) + 1;
+
+    x = Math.max(1, Math.min(x, term.cols));
+    y = Math.max(1, Math.min(y, term.rows));
+
+    return { x, y };
+  };
 
   const handleTouchStart = (e: TouchEvent) => {
     if (e.touches.length === 1) {
+      touchStartX.current = e.touches[0].clientX;
       touchStartY.current = e.touches[0].clientY;
     }
   };
@@ -13,16 +44,18 @@ export function useTouchScroll(wsRef: React.RefObject<WebSocket>) {
     if (e.touches.length !== 1) return;
     if (window.getSelection().toString().length > 0) return;
     const deltaY = e.touches[0].clientY - touchStartY.current;
-    const threshold = 30; // pixels to consider a scroll gesture
+    const threshold = 30;
     if (Math.abs(deltaY) >= threshold) {
       const direction = deltaY < 0 ? "down" : "up";
       if (wsRef.current?.readyState === WebSocket.OPEN) {
-        // SGR mouse wheel mode: 64 for up, 65 for down
         const button = direction === "up" ? 64 : 65;
-        const seq = `\x1b[<${button};1;1M`;
+        const { x, y } = getTerminalCoords(
+          e.touches[0].clientX,
+          e.touches[0].clientY,
+        );
+        const seq = `\x1b[<${button};${x};${y}M`;
         wsRef.current.send(seq);
       }
-      // Reset start point to avoid repeated sends for the same gesture
       touchStartY.current = e.touches[0].clientY;
     }
   };
