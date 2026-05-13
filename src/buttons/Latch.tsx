@@ -1,18 +1,18 @@
 import { useRef, type PointerEvent } from "react";
 
-interface ToggleButtonProps {
+interface LatchButtonProps {
   label: string;
   setActive: (state: boolean) => void;
   isActive: boolean;
   onHoldChange?: (isHeld: boolean) => void;
 }
 
-export function ToggleButton({
+export function LatchButton({
   label,
   setActive,
   isActive,
   onHoldChange,
-}: ToggleButtonProps) {
+}: LatchButtonProps) {
   const startRef = useRef<number | null>(null);
 
   const handlePointerDown = (e: PointerEvent) => {

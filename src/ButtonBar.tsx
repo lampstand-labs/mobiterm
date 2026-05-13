@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StandardButton, ToggleButton, ArrowButton } from "./buttons";
+import { StandardButton, LatchButton, ArrowButton } from "./buttons";
 import { TextInput } from "./TextInput";
 
 interface ButtonBarProps {
@@ -54,7 +54,7 @@ export function ButtonBar({
       <div className="button-bar">
         <StandardButton label="Esc" onClick={() => onStandardClick("\x1b")} />
         <StandardButton label="Tab" onClick={() => onStandardClick("\t")} />
-        <ToggleButton
+        <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
           isActive={isActiveCtrl}

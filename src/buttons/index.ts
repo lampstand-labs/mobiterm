@@ -1,3 +1,3 @@
 export { StandardButton } from "./Standard";
-export { ToggleButton } from "./Toggle";
+export { LatchButton } from "./Latch";
 export { ArrowButton } from "./Arrow";
