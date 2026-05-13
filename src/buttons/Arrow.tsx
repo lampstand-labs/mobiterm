@@ -78,9 +78,7 @@ export function ArrowButton({
       // start auto-repeat after initial delay
       if (repeatTimer.current) clearTimeout(repeatTimer.current);
       if (repeatEnabled) {
-        repeatTimer.current = setTimeout(() => {
-          repeatTimer.current = setInterval(() => sendDirection(dir), 100);
-        }, 500);
+        repeatTimer.current = setInterval(() => sendDirection(dir), 150);
       }
     }
   };
