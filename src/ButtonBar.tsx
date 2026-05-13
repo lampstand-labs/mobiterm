@@ -11,6 +11,13 @@ interface ButtonBarProps {
   focusTerminal?: () => void;
 }
 
+const extraButtons = [
+  { label: "S+Tab", seq: "\x1b[Z" },
+  { label: "Space", seq: " " },
+  { label: "^C", seq: "\x03" },
+  { label: "↵", seq: "\r" },
+];
+
 export function ButtonBar({
   onStandardClick,
   setActiveCtrl,
@@ -20,18 +27,29 @@ export function ButtonBar({
   focusTerminal,
 }: ButtonBarProps) {
   const [showInput, setShowInput] = useState(false);
+  const [showExtra, setShowExtra] = useState(false);
 
   useEffect(() => {
     fitTerminal();
-    if (!showInput) {
+    if (!showInput && !showExtra) {
       focusTerminal();
     }
-  }, [showInput]);
+  }, [showInput, showExtra]);
 
   return (
     <>
       {showInput && (
         <TextInput onSend={onStandardClick} fitTerminal={fitTerminal} />
+      )}
+      {showExtra && (
+        <div className="button-bar">
+          {extraButtons.map((b) => (
+            <StandardButton
+              label={b.label}
+              onClick={() => onStandardClick(b.seq)}
+            />
+          ))}
+        </div>
       )}
       <div className="button-bar">
         <StandardButton label="Esc" onClick={() => onStandardClick("\x1b")} />
@@ -52,6 +70,13 @@ export function ButtonBar({
           }}
           repeatEnabled={true}
         />
+        <button
+          onPointerDown={(e) => e.preventDefault()}
+          className={showInput ? "toggle-active" : undefined}
+          onClick={() => setShowInput((v) => !v)}
+        >
+          Aa
+        </button>
         <ArrowButton
           onArrow={onStandardClick}
           arrows={{
@@ -61,10 +86,10 @@ export function ButtonBar({
         />
         <button
           onPointerDown={(e) => e.preventDefault()}
-          className={showInput ? "toggle-active" : undefined}
-          onClick={() => setShowInput((v) => !v)}
+          className={showExtra ? "toggle-active" : undefined}
+          onClick={() => setShowExtra((v) => !v)}
         >
-          Aa
+          …
         </button>
       </div>
     </>
