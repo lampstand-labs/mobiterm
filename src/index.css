@@ -1,6 +1,13 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 html,
 body,
 #root {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -11,6 +18,14 @@ body,
 .app {
   display: flex;
   flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Remove padding if any input is focused */
+:root:has(input:focus, textarea:focus, [contenteditable]:focus) .app {
+  padding-bottom: 0;
 }
 
 .container-terminal {
@@ -123,7 +138,7 @@ body,
   border: none;
   border-top: 1px solid #3c3c3c;
   outline: none;
-  padding: 8px 8px 0 8px;
+  padding: 8px;
   font-size: 13px;
   font-family: monospace;
   resize: none;
