@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, memo } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   StandardButton,
   LatchButton,
@@ -9,11 +10,11 @@ import { TextInput } from "./TextInput";
 
 interface ToolBarProps {
   onStandardClick: (data: string) => void;
-  setActiveCtrl: (state: boolean) => void;
+  setActiveCtrl: Dispatch<SetStateAction<boolean>>;
   isActiveCtrl: boolean;
   onCtrlHoldChange?: (isHeld: boolean) => void;
-  fitTerminal?: () => void;
-  focusTerminal?: () => void;
+  fitTerminal: () => void;
+  focusTerminal: () => void;
 }
 
 const ARROWS = {

@@ -72,7 +72,8 @@ export function Terminal({
     requestAnimationFrame(() => {
       window.scrollTo(0, 0);
       fitAddonRef.current?.fit();
-      const { cols, rows } = terminalRef.current;
+      const cols = terminalRef.current?.cols;
+      const rows = terminalRef.current?.rows;
       if (cols && rows && wsRef.current?.readyState === WebSocket.OPEN) {
         wsRef.current.send(`\x1b[RESIZE:${cols};${rows}]`);
       }

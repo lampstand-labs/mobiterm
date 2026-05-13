@@ -1,7 +1,12 @@
 import { serve } from "bun";
+import type { ServerWebSocket, Subprocess } from "bun";
 import index from "./index.html";
 
-const server = serve({
+interface WebSocketData {
+  proc?: Subprocess;
+}
+
+const server = serve<WebSocketData>({
   routes: {
     "/": index,
   },
@@ -9,7 +14,7 @@ const server = serve({
   fetch(req, server) {
     const url = new URL(req.url);
     if (url.pathname === "/ws") {
-      if (server.upgrade(req)) return;
+      if (server.upgrade(req, { data: {} })) return;
     }
     return new Response("Not Found", { status: 404 });
   },

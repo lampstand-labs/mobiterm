@@ -4,8 +4,8 @@ import { type FitAddon } from "@xterm/addon-fit";
 import { AttachAddon } from "@xterm/addon-attach";
 
 export function useWebSocket(
-  terminalRef: React.RefObject<XTerm>,
-  fitAddonRef: React.RefObject<FitAddon>,
+  terminalRef: React.RefObject<XTerm | null>,
+  fitAddonRef: React.RefObject<FitAddon | null>,
   isLatchedCtrl: boolean,
   setLatchedCtrl: (state: boolean) => void,
   isCtrlHeld: boolean,
@@ -46,7 +46,7 @@ export function useWebSocket(
         if (ctrlLatchedRef.current && typeof data === "string") {
           const m = data.match(/^([a-zA-Z])$/);
           if (m) {
-            data = String.fromCharCode(m[1].charCodeAt(0) & 0x1f);
+            data = String.fromCharCode(m[1]!.charCodeAt(0) & 0x1f);
             if (!ctrlHeldRef.current) {
               setLatchedCtrl(false);
             }

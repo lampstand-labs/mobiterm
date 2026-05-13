@@ -1,8 +1,14 @@
-import { useRef, memo, type PointerEvent } from "react";
+import {
+  useRef,
+  memo,
+  type PointerEvent,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 interface LatchButtonProps {
   label: string;
-  setActive: (state: boolean) => void;
+  setActive: Dispatch<SetStateAction<boolean>>;
   isActive: boolean;
   onHoldChange?: (isHeld: boolean) => void;
 }

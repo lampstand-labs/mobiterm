@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, type TouchEvent } from "react";
 import type { Terminal as XTerm } from "@xterm/xterm";
 
 export function useTouchScroll(
@@ -33,30 +33,29 @@ export function useTouchScroll(
     return { x, y };
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
-    if (e.touches.length === 1) {
-      touchStartX.current = e.touches[0].clientX;
-      touchStartY.current = e.touches[0].clientY;
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (e.touches.length === 1 && touch) {
+      touchStartX.current = touch.clientX;
+      touchStartY.current = touch.clientY;
     }
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
-    if (e.touches.length !== 1) return;
-    if (window.getSelection().toString().length > 0) return;
-    const deltaY = e.touches[0].clientY - touchStartY.current;
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    const touch = e.touches[0];
+    if (e.touches.length !== 1 || !touch) return;
+    if ((window.getSelection()?.toString().length ?? 0) > 0) return;
+    const deltaY = touch.clientY - touchStartY.current;
     const threshold = 30;
     if (Math.abs(deltaY) >= threshold) {
       const direction = deltaY < 0 ? "down" : "up";
       if (wsRef.current?.readyState === WebSocket.OPEN) {
         const button = direction === "up" ? 64 : 65;
-        const { x, y } = getTerminalCoords(
-          e.touches[0].clientX,
-          e.touches[0].clientY,
-        );
+        const { x, y } = getTerminalCoords(touch.clientX, touch.clientY);
         const seq = `\x1b[<${button};${x};${y}M`;
         wsRef.current.send(seq);
       }
-      touchStartY.current = e.touches[0].clientY;
+      touchStartY.current = touch.clientY;
     }
   };
 

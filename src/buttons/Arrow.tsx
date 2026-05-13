@@ -31,7 +31,7 @@ export const ArrowButton = memo(function ArrowButton({
   repeatEnabled = false,
   arrows = {},
 }: ArrowButtonProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLButtonElement>(null);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
   const repeatTimer = useRef<NodeJS.Timeout | null>(null);
   const arrowsRef = useRef(arrows);
