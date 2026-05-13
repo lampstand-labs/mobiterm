@@ -35,11 +35,14 @@ export function ToolBar({
   const [showExtra, setShowExtra] = useState(false);
 
   useEffect(() => {
-    fitTerminal();
-    if (!showInput && !showExtra) {
+    if (!showInput) {
       focusTerminal();
     }
-  }, [showInput, showExtra]);
+  }, [showInput]);
+
+  useEffect(() => {
+    fitTerminal();
+  }, [showExtra]);
 
   return (
     <>
