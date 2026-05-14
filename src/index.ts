@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import type { ServerWebSocket, Subprocess } from "bun";
-import index from "./index.html";
+import index from "./client/index.html";
 import { createPushRoutes } from "./server/push";
 import { parseArgs } from "./server/args";
 
