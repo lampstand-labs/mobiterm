@@ -1,5 +1,7 @@
 import { Database } from "bun:sqlite";
 import { hash } from "bun";
+import { mkdirSync } from "fs";
+import { dirname } from "path";
 import webPush from "web-push";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -70,6 +72,7 @@ function initDb(identifier: string): {
   instances: InstanceStore;
 } {
   const path = dbPath();
+  mkdirSync(dirname(path), { recursive: true });
   const db = new Database(path, { create: true });
   db.run("PRAGMA journal_mode=WAL");
 
