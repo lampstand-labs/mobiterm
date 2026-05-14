@@ -84,6 +84,7 @@ export const ArrowButton = memo(function ArrowButton({
 
   // Pointer event handlers (covers mouse, touch, stylus)
   const onPointerDown = (e: PointerEvent) => {
+    e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
     startTracking(e.clientX, e.clientY);
   };
@@ -93,8 +94,7 @@ export const ArrowButton = memo(function ArrowButton({
     moveTracking(e.clientX, e.clientY);
   };
 
-  const onPointerUp = (e: PointerEvent) => {
-    e.currentTarget.releasePointerCapture(e.pointerId);
+  const onPointerUp = () => {
     endTracking();
   };
 
