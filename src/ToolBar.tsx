@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, useRef, memo } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   StandardButton,
@@ -39,11 +39,13 @@ export const ToolBar = memo(function ToolBar({
 }: ToolBarProps) {
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
+  const prevShowInput = useRef(showInput);
 
   useEffect(() => {
-    if (!showInput) {
+    if (prevShowInput.current && !showInput) {
       focusTerminal();
     }
+    prevShowInput.current = showInput;
   }, [showInput]);
 
   useEffect(() => {
