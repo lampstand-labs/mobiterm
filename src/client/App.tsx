@@ -5,6 +5,7 @@ import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
+import { PushBanner } from "./PushBanner";
 
 export function App() {
   const { viewportHeight, isDockedKeyboardVisible } = useVisualViewport();
@@ -43,6 +44,7 @@ export function App() {
         paddingBottom: isDockedKeyboardVisible ? 0 : undefined,
       }}
     >
+      <PushBanner />
       <Terminal
         ref={terminalRef}
         viewportHeight={viewportHeight}
