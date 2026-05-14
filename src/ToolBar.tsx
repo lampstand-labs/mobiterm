@@ -44,6 +44,7 @@ export const ToolBar = memo(function ToolBar({
   useEffect(() => {
     if (prevShowInput.current && !showInput) {
       focusTerminal();
+      fitTerminal();
     }
     prevShowInput.current = showInput;
   }, [showInput]);
