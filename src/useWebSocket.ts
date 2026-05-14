@@ -24,8 +24,6 @@ export function useWebSocket(
   }, [isCtrlHeld]);
 
   useEffect(() => {
-    if (!terminalRef.current) return;
-
     let attachAddon: AttachAddon | null = null;
     let disposed = false;
 
@@ -95,7 +93,7 @@ export function useWebSocket(
         wsRef.current.close();
       }
     };
-  }, [terminalRef, fitAddonRef]);
+  }, []);
 
   return wsRef;
 }
