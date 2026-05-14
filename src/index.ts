@@ -1,6 +1,10 @@
 import { serve } from "bun";
 import type { ServerWebSocket, Subprocess } from "bun";
 import index from "./index.html";
+import { createPushRoutes } from "./server/push";
+import { parseArgs } from "./server/args";
+
+const { identifier, vapidContact } = parseArgs();
 
 interface WebSocketData {
   proc?: Subprocess;
@@ -9,6 +13,7 @@ interface WebSocketData {
 const server = serve<WebSocketData>({
   routes: {
     "/": index,
+    ...createPushRoutes(identifier, vapidContact),
   },
 
   fetch(req, server) {
@@ -22,18 +27,13 @@ const server = serve<WebSocketData>({
   websocket: {
     open(ws) {
       console.log("Client connected. Spawning shell...");
-
-      // 1. Spawn the process with a terminal attached
       const proc = Bun.spawn(["tmux", "new", "-A", "-s", "dev"], {
         terminal: {
           data(terminal, data) {
-            // 2. Forward process output to the WebSocket client
             ws.send(data);
           },
         },
       });
-
-      // Attach the process to the WebSocket object for cleanup
       ws.data = { proc };
     },
     message(ws, message) {
@@ -43,7 +43,6 @@ const server = serve<WebSocketData>({
           ? message
           : new TextDecoder().decode(message);
 
-      // Handle terminal resize requests from the client
       if (input.startsWith("\x1b[RESIZE:")) {
         const match = input.match(/\x1b\[RESIZE:(\d+);(\d+)\]/);
         if (match) {
@@ -59,7 +58,6 @@ const server = serve<WebSocketData>({
         return;
       }
 
-      // 3. Forward client input to the process terminal
       proc.terminal.write(message);
     },
     close(ws) {
@@ -71,10 +69,7 @@ const server = serve<WebSocketData>({
   },
 
   development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
     hmr: true,
-
-    // Echo console logs from the browser to the server
     console: true,
   },
 });
