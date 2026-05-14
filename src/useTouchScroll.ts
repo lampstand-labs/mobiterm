@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import type { TouchEvent } from "react";
+import type { RefObject, TouchEvent } from "react";
 import type { Terminal as XTerm } from "@xterm/xterm";
 
 export function useTouchScroll(
-  wsRef: React.RefObject<WebSocket | null>,
-  terminalRef: React.RefObject<XTerm | null>,
-  containerRef: React.RefObject<HTMLDivElement | null>,
+  wsRef: RefObject<WebSocket | null>,
+  terminalRef: RefObject<XTerm | null>,
+  containerRef: RefObject<HTMLDivElement | null>,
 ) {
   const touchStartY = useRef(0);
   const touchStartX = useRef(0);
