@@ -5,6 +5,7 @@ import type { Ref } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { useTouchScroll } from "./useTouchScroll";
+import { setupKeyHandler } from "./keyHandler";
 import { useWebSocket } from "./useWebSocket";
 
 interface TerminalProps {
@@ -53,6 +54,7 @@ export function Terminal({
       fontSize: 12,
       macOptionClickForcesSelection: true,
     });
+    setupKeyHandler(terminalRef.current);
     fitAddonRef.current = new FitAddon();
 
     terminalRef.current.loadAddon(fitAddonRef.current);
