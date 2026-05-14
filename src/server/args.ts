@@ -5,6 +5,8 @@ const spec = {
   "-h": "--help",
   "--vapid-contact": String,
   "-c": "--vapid-contact",
+  "--port": String,
+  "-p": "--port",
 };
 
 function printHelp(): void {
@@ -21,10 +23,17 @@ function printHelp(): void {
   console.error(
     "  -c, --vapid-contact <email|url>    Contact for VAPID push notifications",
   );
+  console.error(
+    "  -p, --port <number>                  Port to listen on (default: 3000)",
+  );
   console.error("  -h, --help                         Show this help message");
 }
 
-export function parseArgs(): { identifier: string; vapidContact?: string } {
+export function parseArgs(): {
+  identifier: string;
+  vapidContact?: string;
+  port?: number;
+} {
   const args = arg(spec);
 
   if (args["--help"]) {
@@ -38,5 +47,9 @@ export function parseArgs(): { identifier: string; vapidContact?: string } {
     process.exit(1);
   }
 
-  return { identifier, vapidContact: args["--vapid-contact"] };
+  return {
+    identifier,
+    vapidContact: args["--vapid-contact"],
+    port: args["--port"] ? Number(args["--port"]) : undefined,
+  };
 }
