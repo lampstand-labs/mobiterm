@@ -10,23 +10,25 @@ const spec = {
 };
 
 function printHelp(): void {
-  console.error("Usage: mobiterm <identifier> [options]");
-  console.error("");
-  console.error("Start a mobiTerm server with a named instance.");
-  console.error("");
-  console.error("Arguments:");
-  console.error(
+  console.log("Usage: mobiterm <identifier> [options]");
+  console.log("");
+  console.log("Start a mobiTerm server with a named instance.");
+  console.log("");
+  console.log("Arguments:");
+  console.log(
     "  identifier    Unique name for this server instance (required)",
   );
-  console.error("");
-  console.error("Options:");
-  console.error(
+  console.log("");
+  console.log("Options:");
+  console.log(
     "  -c, --vapid-contact <email|url>    Contact for VAPID push notifications",
   );
-  console.error(
-    "  -p, --port <number>                  Port to listen on (default: 3000)",
+  console.log(
+    "  -p, --port <number>                Port to listen on (default: 3000)",
   );
-  console.error("  -h, --help                         Show this help message");
+  console.log(
+    "  -h, --help                         Show this help message",
+  );
 }
 
 export function parseArgs(): {
