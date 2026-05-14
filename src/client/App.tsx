@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
@@ -11,6 +11,17 @@ export function App() {
   const terminalRef = useRef<TerminalHandle | null>(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
+  const [hasTmux, setHasTmux] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch("/api/hasTmux");
+        const d = await r.json();
+        setHasTmux(d.hasTmux);
+      } catch {}
+    })();
+  }, []);
 
   const standardHandler = useCallback((data: string) => {
     terminalRef.current?.send(data);
@@ -46,6 +57,7 @@ export function App() {
         onCtrlHoldChange={setCtrlHeld}
         fitTerminal={fitTerminal}
         focusTerminal={focusTerminal}
+        hasTmux={hasTmux}
       />
     </div>
   );

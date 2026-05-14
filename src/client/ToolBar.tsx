@@ -27,6 +27,7 @@ interface ToolBarProps {
   onCtrlHoldChange?: (isHeld: boolean) => void;
   fitTerminal: () => void;
   focusTerminal: () => void;
+  hasTmux: boolean;
 }
 
 export const ToolBar = memo(function ToolBar({
@@ -36,6 +37,7 @@ export const ToolBar = memo(function ToolBar({
   onCtrlHoldChange,
   fitTerminal,
   focusTerminal,
+  hasTmux,
 }: ToolBarProps) {
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
@@ -109,7 +111,9 @@ export const ToolBar = memo(function ToolBar({
           isActive={showInput}
           onClick={handleToggleInput}
         />
-        <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
+        {hasTmux && (
+          <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
+        )}
         <ToggleButton
           label="…"
           isActive={showExtra}
