@@ -8,15 +8,6 @@ import {
 } from "./buttons";
 import { TextInput } from "./TextInput";
 
-interface ToolBarProps {
-  onStandardClick: (data: string) => void;
-  setActiveCtrl: Dispatch<SetStateAction<boolean>>;
-  isActiveCtrl: boolean;
-  onCtrlHoldChange?: (isHeld: boolean) => void;
-  fitTerminal: () => void;
-  focusTerminal: () => void;
-}
-
 const ARROWS = {
   up: { char: "↑", seq: "\x1b[A" },
   down: { char: "↓", seq: "\x1b[B" },
@@ -28,6 +19,15 @@ const TMUX_ARROWS = {
   left: { char: "◀", seq: "\x02p" },
   right: { char: "▶", seq: "\x02n" },
 };
+
+interface ToolBarProps {
+  onStandardClick: (data: string) => void;
+  setActiveCtrl: Dispatch<SetStateAction<boolean>>;
+  isActiveCtrl: boolean;
+  onCtrlHoldChange?: (isHeld: boolean) => void;
+  fitTerminal: () => void;
+  focusTerminal: () => void;
+}
 
 export const ToolBar = memo(function ToolBar({
   onStandardClick,
