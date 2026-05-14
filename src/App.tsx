@@ -7,7 +7,7 @@ import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
 
 export function App() {
-  const viewportHeight = useVisualViewport();
+  const { viewportHeight, isDockedKeyboardVisible } = useVisualViewport();
   const terminalRef = useRef<TerminalHandle | null>(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
@@ -25,7 +25,13 @@ export function App() {
   }, []);
 
   return (
-    <div className="app" style={{ height: `${viewportHeight}px` }}>
+    <div
+      className="app"
+      style={{
+        height: `${viewportHeight}px`,
+        paddingBottom: isDockedKeyboardVisible ? 0 : undefined,
+      }}
+    >
       <Terminal
         ref={terminalRef}
         viewportHeight={viewportHeight}

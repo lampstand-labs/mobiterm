@@ -23,11 +23,6 @@ body,
   padding-right: env(safe-area-inset-right);
 }
 
-/* Remove padding if any input is focused */
-:root:has(input:focus, textarea:focus, [contenteditable]:focus) .app {
-  padding-bottom: 0;
-}
-
 .container-terminal {
   flex: 1;
   min-height: 0;
