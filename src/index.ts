@@ -22,7 +22,7 @@ function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
         fetch(req, server) {
           const url = new URL(req.url);
           if (url.pathname === "/ws") {
-            if (server.upgrade(req, { data: {} })) return;
+            if (server.upgrade(req, { data: { identifier } })) return;
           }
           return new Response("Not Found", { status: 404 });
         },

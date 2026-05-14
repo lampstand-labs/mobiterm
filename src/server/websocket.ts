@@ -1,7 +1,9 @@
 import type { ServerWebSocket, Subprocess } from "bun";
+import { which } from "bun";
 
 export interface WebSocketData {
   proc?: Subprocess;
+  identifier: string;
 }
 
 function handleResize(proc: Subprocess, input: string): boolean {
@@ -18,14 +20,21 @@ function handleResize(proc: Subprocess, input: string): boolean {
 export const websocket = {
   open(ws: ServerWebSocket<WebSocketData>) {
     console.log("Client connected. Spawning shell...");
-    const proc = Bun.spawn(["tmux", "new", "-A", "-s", "dev"], {
+    const hasTmux = which("tmux");
+    if (!hasTmux) {
+      console.log(`tmux is recommended but not found, falling back to ${process.env.SHELL || "bash"}`);
+    }
+    const shellCmd = hasTmux
+      ? ["tmux", "new", "-A", "-s", ws.data.identifier]
+      : [process.env.SHELL || "bash"];
+    const proc = Bun.spawn(shellCmd, {
       terminal: {
         data(terminal, data) {
           ws.send(data);
         },
       },
     });
-    ws.data = { proc };
+    ws.data = { ...ws.data, proc };
   },
 
   message(ws: ServerWebSocket<WebSocketData>, message: string | Buffer) {
