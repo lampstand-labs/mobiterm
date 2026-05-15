@@ -21,7 +21,7 @@ function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
           "/": index,
           ...createPushRoutes(identifier, vapidContact),
           "/service-worker.js": () =>
-            new Response(file(workerFile), {
+            new Response(file(workerFile as URL), {
               headers: { "Content-Type": "application/javascript" },
             }),
           "/api/hasTmux": {

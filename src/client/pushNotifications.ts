@@ -7,7 +7,7 @@ function isPushSupported(): boolean {
 }
 
 export function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-  if (!isPushSupported()) return null;
+  if (!isPushSupported()) return Promise.resolve(null);
   return navigator.serviceWorker.register("/service-worker.js");
 }
 
