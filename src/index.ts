@@ -2,7 +2,7 @@ import index from "./client/index.html";
 import workerFile from "./client/service-worker.js" with { type: "file" };
 
 import { serve, which, file } from "bun";
-import { createPushRoutes } from "./server/push";
+import { createPushRoutes } from "./server/webpush";
 import { parseArgs } from "./server/args";
 import { websocket } from "./server/websocket";
 import type { WebSocketData } from "./server/websocket";
