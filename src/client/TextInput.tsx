@@ -40,7 +40,7 @@ export function TextInput({ onSend, fitTerminal }: TextInputProps) {
           handleSend();
         }
       }}
-      placeholder="Type and press Enter to send..."
+      placeholder="Type or dictate and press Enter to send..."
       rows={1}
     />
   );
