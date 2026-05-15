@@ -16,7 +16,7 @@ function printHelp(): void {
   console.log("");
   console.log("Arguments:");
   console.log(
-    "  identifier    Unique name for this server instance (required)",
+    "  identifier    Unique name for this instance, used for persistent tmux session and web push configs (required)",
   );
   console.log("");
   console.log("Options:");
@@ -26,9 +26,7 @@ function printHelp(): void {
   console.log(
     "  -p, --port <number>                Port to listen on (default: 3000)",
   );
-  console.log(
-    "  -h, --help                         Show this help message",
-  );
+  console.log("  -h, --help                         Show this help message");
 }
 
 export function parseArgs(): {
