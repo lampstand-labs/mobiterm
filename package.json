@@ -7,7 +7,8 @@
     "dev": "bun --hot src/index.ts development",
     "build": "bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
     "start": "NODE_ENV=production bun src/index.ts",
-    "compile": "bun build ./src/index.ts --compile --production --bytecode --sourcemap --outfile out/mobiterm"
+    "compile": "bun build ./src/index.ts --compile --production --bytecode --sourcemap --outfile out/mobiterm",
+    "release": "bash scripts/release.sh"
   },
   "dependencies": {
     "@xterm/addon-attach": "^0.12.0",
