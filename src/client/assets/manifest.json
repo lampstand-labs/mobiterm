@@ -1,7 +1,7 @@
 {
   "name": "mobiTerm",
   "short_name": "mobiTerm",
-  "description": "A lightweight, mobile-first web terminal for remote access from any device.",
+  "description": "A mobile-first web terminal for remote access from any device.",
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#1e1e1e",
