@@ -43,7 +43,9 @@ export function PushBanner() {
 
   return (
     <div className="push-banner">
-      <span className="push-banner__message">Enable push notifications</span>
+      <span className="push-banner__message">
+        Enable self-sent push notifications
+      </span>
       <span className="push-banner__actions">
         <button
           className="push-banner__subscribe"
