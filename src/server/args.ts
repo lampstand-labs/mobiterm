@@ -21,7 +21,7 @@ function printHelp(): void {
   console.log("");
   console.log("Options:");
   console.log(
-    "  -c, --vapid-contact <email|url>    Contact for VAPID push notifications",
+    "  -c, --vapid-contact <email|url>    Contact for VAPID push notifications (default: admin@<identifier>.com)",
   );
   console.log(
     "  -p, --port <number>                Port to listen on (default: 3000)",

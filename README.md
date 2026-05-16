@@ -60,7 +60,7 @@ mobiterm [--port <port>] [--vapid-contact <email>] <identifier>
 
 - `<identifier>` - A unique name for this instance (used for tmux session and push notification)
 - `--port` - Port to listen on (default: 3000)
-- `--vapid-contact` - Contact email for VAPID push notifications
+- `--vapid-contact` - Contact email for VAPID push notifications (default: admin@<identifier>.com)
 
 ## BYOT (bring-your-own-tunnel)
 
