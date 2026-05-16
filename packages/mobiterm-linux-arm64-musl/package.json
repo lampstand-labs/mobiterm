@@ -1,0 +1,22 @@
+{
+  "name": "@lampstand-labs/mobiterm-linux-arm64-musl",
+  "version": "0.1.0",
+  "description": "The Linux ARM64 MUSL binary for mobiterm.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lampstand-labs/mobiterm.git"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "libc": [
+    "musl"
+  ],
+  "files": [
+    "bin"
+  ]
+}

@@ -1,29 +1,49 @@
 {
-  "name": "bun-react-template",
+  "name": "@lampstand-labs/mobiterm",
   "version": "0.1.0",
-  "private": true,
+  "description": "A mobile-first web terminal for remote access from any device.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lampstand-labs/mobiterm.git"
+  },
   "type": "module",
+  "bin": "scripts/install.cjs",
+  "files": [
+    "scripts/install.cjs",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "bun --hot src/index.ts development",
     "build": "bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
     "start": "NODE_ENV=production bun src/index.ts",
     "compile": "bun build ./src/index.ts --compile --production --bytecode --sourcemap --outfile out/mobiterm",
-    "release": "bash scripts/release.sh"
+    "release": "bash scripts/release.sh",
+    "publish": "bash scripts/publish.sh"
   },
   "dependencies": {
+    "detect-libc": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/web-push": "^3.6.4",
     "@xterm/addon-attach": "^0.12.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "arg": "^5.0.2",
+    "prettier": "^3.8.3",
     "react": "^19",
     "react-dom": "^19",
     "web-push": "^3.6.7"
   },
-  "devDependencies": {
-    "@types/web-push": "^3.6.4",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/bun": "latest",
-    "prettier": "^3.8.3"
+  "optionalDependencies": {
+    "@lampstand-labs/mobiterm-darwin-arm64": "0.1.0",
+    "@lampstand-labs/mobiterm-darwin-x64": "0.1.0",
+    "@lampstand-labs/mobiterm-linux-arm64-gnu": "0.1.0",
+    "@lampstand-labs/mobiterm-linux-arm64-musl": "0.1.0",
+    "@lampstand-labs/mobiterm-linux-x64-gnu": "0.1.0",
+    "@lampstand-labs/mobiterm-linux-x64-musl": "0.1.0"
   }
 }

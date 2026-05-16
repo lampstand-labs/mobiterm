@@ -5,6 +5,7 @@ node_modules
 out
 dist
 data
+packages/*/bin/
 *.tgz
 
 # code coverage

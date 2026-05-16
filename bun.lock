@@ -5,20 +5,29 @@
     "": {
       "name": "bun-react-template",
       "dependencies": {
-        "@types/web-push": "^3.6.4",
-        "@xterm/addon-attach": "^0.12.0",
-        "@xterm/addon-fit": "^0.11.0",
-        "@xterm/xterm": "^6.0.0",
-        "arg": "^5.0.2",
-        "react": "^19",
-        "react-dom": "^19",
-        "web-push": "^3.6.7",
+        "detect-libc": "^2.1.2",
       },
       "devDependencies": {
         "@types/bun": "latest",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "@types/web-push": "^3.6.4",
+        "@xterm/addon-attach": "^0.12.0",
+        "@xterm/addon-fit": "^0.11.0",
+        "@xterm/xterm": "^6.0.0",
+        "arg": "^5.0.2",
         "prettier": "^3.8.3",
+        "react": "^19",
+        "react-dom": "^19",
+        "web-push": "^3.6.7",
+      },
+      "optionalDependencies": {
+        "@lampstand-labs/mobiterm-darwin-arm64": "0.1.0",
+        "@lampstand-labs/mobiterm-darwin-x64": "0.1.0",
+        "@lampstand-labs/mobiterm-linux-arm64-gnu": "0.1.0",
+        "@lampstand-labs/mobiterm-linux-arm64-musl": "0.1.0",
+        "@lampstand-labs/mobiterm-linux-x64-gnu": "0.1.0",
+        "@lampstand-labs/mobiterm-linux-x64-musl": "0.1.0",
       },
     },
   },
@@ -54,6 +63,8 @@
     "csstype": ["csstype@3.2.3", "", {}, "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
+
+    "detect-libc": ["detect-libc@2.1.2", "", {}, "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ=="],
 
     "ecdsa-sig-formatter": ["ecdsa-sig-formatter@1.0.11", "", { "dependencies": { "safe-buffer": "^5.0.1" } }, "sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ=="],
 

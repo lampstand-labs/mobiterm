@@ -1,0 +1,22 @@
+{
+  "name": "@lampstand-labs/mobiterm-linux-arm64-gnu",
+  "version": "0.1.0",
+  "description": "The Linux ARM64 GLIBC binary for mobiterm.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lampstand-labs/mobiterm.git"
+  },
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "libc": [
+    "glibc"
+  ],
+  "files": [
+    "bin"
+  ]
+}

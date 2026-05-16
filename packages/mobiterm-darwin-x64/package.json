@@ -1,0 +1,19 @@
+{
+  "name": "@lampstand-labs/mobiterm-darwin-x64",
+  "version": "0.1.0",
+  "description": "The macOS x64 binary for mobiterm.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lampstand-labs/mobiterm.git"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "files": [
+    "bin"
+  ]
+}
