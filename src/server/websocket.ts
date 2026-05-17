@@ -39,7 +39,7 @@ export const websocket = {
     // prettier-ignore
     const cmd = ws.data.hasTmux
       ? [
-          "tmux", "-L", "mobiterm",
+          "tmux", "-u", "-L", "mobiterm",
           "set-option", "-g", "default-terminal", getBestTerminalProfile(),
           ";",
           "new", "-A", "-s", ws.data.identifier, shell,
@@ -47,7 +47,14 @@ export const websocket = {
           "set-option", "-g", "mouse", "on",
         ]
       : [shell];
+    const locale = process.platform === "darwin" ? "en_US.UTF-8" : "C.UTF-8";
     const proc = Bun.spawn(cmd, {
+      env: {
+        ...process.env,
+        TERM: "xterm-256color",
+        LANG: locale,
+        LC_ALL: locale,
+      },
       terminal: {
         data(terminal, data) {
           ws.send(data);
