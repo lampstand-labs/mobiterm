@@ -28,14 +28,14 @@ done
 
 echo "==> Publishing platform packages..."
 for dir in packages/*/; do
-  npm publish "$dir" --dry-run
+  npm publish --access public "$dir" --dry-run
 done
 
 echo ""
 echo "==> Dry run complete. Review the output above."
 echo ""
 echo "To publish for real, run:"
-echo "  for dir in packages/*/; do npm publish \"\$dir\"; done"
-echo "  npm publish"
+echo "  for dir in packages/*/; do npm publish --access public \"\$dir\"; done"
+echo "  npm publish --access public"
 echo ""
 echo "Then: git add -A && git commit -m \"v$VERSION\" && git tag \"v$VERSION\" && git push && git push --tags"
