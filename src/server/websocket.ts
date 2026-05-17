@@ -6,6 +6,16 @@ export interface WebSocketData {
   hasTmux: boolean;
 }
 
+function getBestTerminalProfile(): string {
+  try {
+    const process = Bun.spawnSync(["infocmp", "tmux-256color"]);
+    if (process.success) {
+      return "tmux-256color";
+    }
+  } catch (e) {}
+  return "screen-256color";
+}
+
 function handleResize(proc: Subprocess, input: string): boolean {
   const match = input.match(/\x1b\[RESIZE:(\d+);(\d+)\]/);
   if (!match) return false;
@@ -25,10 +35,19 @@ export const websocket = {
         `tmux is recommended but not found, falling back to ${process.env.SHELL || "bash"}`,
       );
     }
-    const shellCmd = ws.data.hasTmux
-      ? ["tmux", "new", "-A", "-s", ws.data.identifier]
-      : [process.env.SHELL || "bash"];
-    const proc = Bun.spawn(shellCmd, {
+    const shell = process.env.SHELL || "bash";
+    // prettier-ignore
+    const cmd = ws.data.hasTmux
+      ? [
+          "tmux", "-L", "mobiterm",
+          "set-option", "-g", "default-terminal", getBestTerminalProfile(),
+          ";",
+          "new", "-A", "-s", ws.data.identifier, shell,
+          ";",
+          "set-option", "-g", "mouse", "on",
+        ]
+      : [shell];
+    const proc = Bun.spawn(cmd, {
       terminal: {
         data(terminal, data) {
           ws.send(data);
