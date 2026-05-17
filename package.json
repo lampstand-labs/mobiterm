@@ -8,7 +8,9 @@
     "url": "git+https://github.com/lampstand-labs/mobiterm.git"
   },
   "type": "module",
-  "bin": "scripts/install.cjs",
+  "bin": {
+    "mobiterm": "scripts/install.cjs"
+  },
   "files": [
     "scripts/install.cjs",
     "LICENSE"
