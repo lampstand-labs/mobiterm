@@ -11,7 +11,7 @@ const { identifier, vapidContact, port } = parseArgs();
 const hasTmux = which("tmux") !== null;
 
 function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
-  let currentPort = port ?? 3000;
+  let currentPort = port ?? 7130;
   while (true) {
     try {
       return serve<WebSocketData>({
