@@ -1,12 +1,14 @@
 import arg from "arg";
 
-const spec = {
+const spec: Record<string, any> = {
   "--help": Boolean,
   "-h": "--help",
   "--vapid-contact": String,
   "-c": "--vapid-contact",
   "--port": String,
   "-p": "--port",
+  "--extensions": [String],
+  "-e": "--extensions",
 };
 
 function printHelp(): void {
@@ -26,6 +28,9 @@ function printHelp(): void {
   console.log(
     "  -p, --port <number>                Port to listen on (default: 7130)",
   );
+  console.log(
+    "  -e, --extensions <dirs...>         Extension directories (comma-separated)",
+  );
   console.log("  -h, --help                         Show this help message");
 }
 
@@ -33,6 +38,7 @@ export function parseArgs(): {
   identifier: string;
   vapidContact?: string;
   port?: number;
+  extensions: string[];
 } {
   const args = arg(spec);
 
@@ -47,9 +53,20 @@ export function parseArgs(): {
     process.exit(1);
   }
 
+  const extensionsRaw = args["--extensions"];
+  const extensions = extensionsRaw
+    ? extensionsRaw.flatMap((s: string) =>
+        s
+          .split(",")
+          .map((p: string) => p.trim())
+          .filter(Boolean),
+      )
+    : [];
+
   return {
     identifier,
     vapidContact: args["--vapid-contact"],
     port: args["--port"] ? Number(args["--port"]) : undefined,
+    extensions,
   };
 }

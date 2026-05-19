@@ -1,11 +1,12 @@
 import "./index.css";
 
-import { useRef, useCallback, useState, useEffect } from "react";
+import { useRef, useCallback, useState, useEffect, useMemo } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
 import { PushBanner } from "./PushBanner";
+import { ExtensionProvider } from "./extensions/ExtensionProvider";
 
 export function App() {
   const { viewportHeight, isDockedKeyboardVisible } = useVisualViewport();
@@ -36,6 +37,21 @@ export function App() {
     terminalRef.current?.focus();
   }, []);
 
+  const terminalHandle = useMemo<TerminalHandle>(
+    () => ({
+      send(data) {
+        terminalRef.current?.send(data);
+      },
+      fit() {
+        terminalRef.current?.fit();
+      },
+      focus() {
+        terminalRef.current?.focus();
+      },
+    }),
+    [],
+  );
+
   return (
     <div
       className="app"
@@ -45,22 +61,24 @@ export function App() {
       }}
     >
       <PushBanner />
-      <Terminal
-        ref={terminalRef}
-        viewportHeight={viewportHeight}
-        isLatchedCtrl={isLatchedCtrl}
-        setLatchedCtrl={setLatchedCtrl}
-        isCtrlHeld={isCtrlHeld}
-      />
-      <ToolBar
-        onStandardClick={standardHandler}
-        setActiveCtrl={setLatchedCtrl}
-        isActiveCtrl={isLatchedCtrl}
-        onCtrlHoldChange={setCtrlHeld}
-        fitTerminal={fitTerminal}
-        focusTerminal={focusTerminal}
-        hasTmux={hasTmux}
-      />
+      <ExtensionProvider terminal={terminalHandle}>
+        <Terminal
+          ref={terminalRef}
+          viewportHeight={viewportHeight}
+          isLatchedCtrl={isLatchedCtrl}
+          setLatchedCtrl={setLatchedCtrl}
+          isCtrlHeld={isCtrlHeld}
+        />
+        <ToolBar
+          onStandardClick={standardHandler}
+          setActiveCtrl={setLatchedCtrl}
+          isActiveCtrl={isLatchedCtrl}
+          onCtrlHoldChange={setCtrlHeld}
+          fitTerminal={fitTerminal}
+          focusTerminal={focusTerminal}
+          hasTmux={hasTmux}
+        />
+      </ExtensionProvider>
     </div>
   );
 }

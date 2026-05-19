@@ -6,8 +6,15 @@ import { createPushRoutes } from "./server/webpush";
 import { parseArgs } from "./server/args";
 import { websocket } from "./server/websocket";
 import type { WebSocketData } from "./server/websocket";
+import {
+  loadExtensions,
+  getServerExtensions,
+  getClientExtensions,
+  getClientBundle,
+} from "./server/extensions";
 
-const { identifier, vapidContact, port } = parseArgs();
+const { identifier, vapidContact, port, extensions } = parseArgs();
+await loadExtensions(extensions);
 const hasTmux = which("tmux") !== null;
 
 function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
@@ -20,6 +27,7 @@ function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
         routes: {
           "/": index,
           ...createPushRoutes(identifier, vapidContact),
+          ...getServerExtensions(),
           "/service-worker.js": () =>
             new Response(file(workerFile as URL), {
               headers: { "Content-Type": "application/javascript" },
@@ -27,12 +35,26 @@ function startServer(port?: number): ReturnType<typeof serve<WebSocketData>> {
           "/api/hasTmux": {
             GET: () => Response.json({ hasTmux }),
           },
+          "/clientExtensions": {
+            GET: () => Response.json(getClientExtensions()),
+          },
         },
 
         fetch(req, server) {
           const url = new URL(req.url);
           if (url.pathname === "/ws") {
             if (server.upgrade(req, { data: { identifier, hasTmux } })) return;
+          }
+          const match = url.pathname.match(
+            /^\/extensions\/([^/]+)\/client\.js$/,
+          );
+          if (match) {
+            const bundle = getClientBundle(match[1]!);
+            if (bundle) {
+              return new Response(new Uint8Array(bundle), {
+                headers: { "Content-Type": "application/javascript" },
+              });
+            }
           }
           return new Response("Not Found", { status: 404 });
         },

@@ -7,6 +7,8 @@ import {
   ToggleButton,
 } from "./buttons";
 import { TextInput } from "./TextInput";
+import { ExtensionSlot } from "./extensions/ExtensionSlot";
+import { ExtensionSlot as Slot } from "./extensions/types";
 
 const ARROWS = {
   up: { char: "↑", seq: "\x1b[A" },
@@ -84,6 +86,7 @@ export const ToolBar = memo(function ToolBar({
       {showInput && (
         <TextInput onSend={onStandardClick} fitTerminal={fitTerminal} />
       )}
+      <ExtensionSlot slot={Slot.ToolbarAbove} />
       {showExtra && (
         <div className="button-bar">
           <StandardButton label="S+Tab" onClick={handleShiftTab} />
@@ -119,6 +122,7 @@ export const ToolBar = memo(function ToolBar({
           isActive={showExtra}
           onClick={handleToggleExtra}
         />
+        <ExtensionSlot slot={Slot.ToolbarInside} />
       </div>
     </>
   );
