@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { useRef, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
@@ -13,17 +13,6 @@ export function App() {
   const terminalRef = useRef<TerminalHandle | null>(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
-  const [hasTmux, setHasTmux] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const r = await fetch("/api/hasTmux");
-        const d = await r.json();
-        setHasTmux(d.hasTmux);
-      } catch {}
-    })();
-  }, []);
 
   const terminalHandle = useMemo<TerminalHandle>(
     () => ({
@@ -61,7 +50,6 @@ export function App() {
           setActiveCtrl={setLatchedCtrl}
           isActiveCtrl={isLatchedCtrl}
           onCtrlHoldChange={setCtrlHeld}
-          hasTmux={hasTmux}
         />
       </ExtensionProvider>
     </div>

@@ -27,19 +27,28 @@ interface ToolBarProps {
   setActiveCtrl: Dispatch<SetStateAction<boolean>>;
   isActiveCtrl: boolean;
   onCtrlHoldChange?: (isHeld: boolean) => void;
-  hasTmux: boolean;
 }
 
 export const ToolBar = memo(function ToolBar({
   setActiveCtrl,
   isActiveCtrl,
   onCtrlHoldChange,
-  hasTmux,
 }: ToolBarProps) {
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
+  const [hasTmux, setHasTmux] = useState(false);
   const prevShowInput = useRef(showInput);
   const { terminal } = useExtensionContext();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/hasTmux");
+        const data = await res.json();
+        setHasTmux(data.hasTmux);
+      } catch {}
+    })();
+  }, []);
 
   useEffect(() => {
     if (prevShowInput.current && !showInput) {
