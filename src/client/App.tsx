@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { useRef, useCallback, useState, useEffect, useMemo } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
@@ -23,18 +23,6 @@ export function App() {
         setHasTmux(d.hasTmux);
       } catch {}
     })();
-  }, []);
-
-  const standardHandler = useCallback((data: string) => {
-    terminalRef.current?.send(data);
-  }, []);
-
-  const fitTerminal = useCallback(() => {
-    terminalRef.current?.fit();
-  }, []);
-
-  const focusTerminal = useCallback(() => {
-    terminalRef.current?.focus();
   }, []);
 
   const terminalHandle = useMemo<TerminalHandle>(
@@ -70,12 +58,9 @@ export function App() {
           isCtrlHeld={isCtrlHeld}
         />
         <ToolBar
-          onStandardClick={standardHandler}
           setActiveCtrl={setLatchedCtrl}
           isActiveCtrl={isLatchedCtrl}
           onCtrlHoldChange={setCtrlHeld}
-          fitTerminal={fitTerminal}
-          focusTerminal={focusTerminal}
           hasTmux={hasTmux}
         />
       </ExtensionProvider>

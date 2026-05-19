@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   StandardButton,
@@ -9,6 +9,7 @@ import {
 import { TextInput } from "./TextInput";
 import { ExtensionSlot } from "./extensions/ExtensionSlot";
 import { ExtensionSlot as Slot } from "./extensions/types";
+import { useExtensionContext } from "./extensions/useExtensionContext";
 
 const ARROWS = {
   up: { char: "↑", seq: "\x1b[A" },
@@ -23,81 +24,58 @@ const TMUX_ARROWS = {
 };
 
 interface ToolBarProps {
-  onStandardClick: (data: string) => void;
   setActiveCtrl: Dispatch<SetStateAction<boolean>>;
   isActiveCtrl: boolean;
   onCtrlHoldChange?: (isHeld: boolean) => void;
-  fitTerminal: () => void;
-  focusTerminal: () => void;
   hasTmux: boolean;
 }
 
 export const ToolBar = memo(function ToolBar({
-  onStandardClick,
   setActiveCtrl,
   isActiveCtrl,
   onCtrlHoldChange,
-  fitTerminal,
-  focusTerminal,
   hasTmux,
 }: ToolBarProps) {
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
   const prevShowInput = useRef(showInput);
+  const { terminal } = useExtensionContext();
 
   useEffect(() => {
     if (prevShowInput.current && !showInput) {
-      focusTerminal();
-      fitTerminal();
+      terminal.focus();
+      terminal.fit();
     }
     prevShowInput.current = showInput;
   }, [showInput]);
 
   useEffect(() => {
-    fitTerminal();
+    terminal.fit();
   }, [showExtra]);
-
-  const handleEsc = useCallback(
-    () => onStandardClick("\x1b"),
-    [onStandardClick],
-  );
-  const handleTab = useCallback(() => onStandardClick("\t"), [onStandardClick]);
-  const handleShiftTab = useCallback(
-    () => onStandardClick("\x1b[Z"),
-    [onStandardClick],
-  );
-  const handleSpace = useCallback(
-    () => onStandardClick(" "),
-    [onStandardClick],
-  );
-  const handleCtrlC = useCallback(
-    () => onStandardClick("\x03"),
-    [onStandardClick],
-  );
-  const handleEnter = useCallback(
-    () => onStandardClick("\r"),
-    [onStandardClick],
-  );
-  const handleToggleInput = useCallback(() => setShowInput((v) => !v), []);
-  const handleToggleExtra = useCallback(() => setShowExtra((v) => !v), []);
 
   return (
     <>
       {showInput && (
-        <TextInput onSend={onStandardClick} fitTerminal={fitTerminal} />
+        <TextInput
+          onSend={(d) => terminal.send(d)}
+          fitTerminal={() => terminal.fit()}
+        />
       )}
       <ExtensionSlot slot={Slot.ToolbarAbove} />
       {showExtra && (
         <div className="button-bar">
-          <StandardButton label="S+Tab" onClick={handleShiftTab} />
-          <StandardButton label="Space" onClick={handleSpace} />
-          <StandardButton label="^C" onClick={handleCtrlC} />
-          <StandardButton label="↵" onClick={handleEnter} />
+          <StandardButton
+            label="S+Tab"
+            onClick={() => terminal.send("\x1b[Z")}
+          />
+          <StandardButton label="Space" onClick={() => terminal.send(" ")} />
+          <StandardButton label="^C" onClick={() => terminal.send("\x03")} />
+          <StandardButton label="↵" onClick={() => terminal.send("\r")} />
         </div>
       )}
       <div className="button-bar">
-        <StandardButton label="Esc" onClick={handleEsc} />
-        <StandardButton label="Tab" onClick={handleTab} />
+        <StandardButton label="Esc" onClick={() => terminal.send("\x1b")} />
+        <StandardButton label="Tab" onClick={() => terminal.send("\t")} />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
@@ -105,22 +83,22 @@ export const ToolBar = memo(function ToolBar({
           onHoldChange={onCtrlHoldChange}
         />
         <ArrowButton
-          onArrow={onStandardClick}
+          onArrow={(d) => terminal.send(d)}
           arrows={ARROWS}
           repeatEnabled={true}
         />
         <ToggleButton
           label="Aa"
           isActive={showInput}
-          onClick={handleToggleInput}
+          onClick={() => setShowInput((v) => !v)}
         />
         {hasTmux && (
-          <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
+          <ArrowButton onArrow={(d) => terminal.send(d)} arrows={TMUX_ARROWS} />
         )}
         <ToggleButton
           label="…"
           isActive={showExtra}
-          onClick={handleToggleExtra}
+          onClick={() => setShowExtra((v) => !v)}
         />
         <ExtensionSlot slot={Slot.ToolbarInside} />
       </div>
