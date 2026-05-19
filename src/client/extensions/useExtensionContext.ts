@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type { TerminalHandle } from "../Terminal";
-import type { ExtensionSlot, SlotEntry } from "./types";
+import type { ExtensionSlot, SlotEntry } from "@lampstand-labs/mobiterm-types";
 
 interface ExtensionContextValue {
   slots: Record<ExtensionSlot, SlotEntry[]>;

@@ -1,0 +1,10 @@
+{
+  "name": "@lampstand-labs/mobiterm-types",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "peerDependencies": {
+    "react": "^19"
+  }
+}

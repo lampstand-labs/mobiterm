@@ -1,4 +1,4 @@
-import type { ExtensionSlot as ExtSlot } from "./types";
+import type { ExtensionSlot as ExtSlot } from "@lampstand-labs/mobiterm-types";
 import { useExtensionContext } from "./useExtensionContext";
 
 interface ExtensionSlotProps {

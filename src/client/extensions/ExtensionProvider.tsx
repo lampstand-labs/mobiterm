@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import type { TerminalHandle } from "../Terminal";
-import type { ClientExtension, SlotEntry } from "./types";
-import { ExtensionSlot } from "./types";
+import type {
+  ClientExtension,
+  SlotEntry,
+} from "@lampstand-labs/mobiterm-types";
+import { ExtensionSlot } from "@lampstand-labs/mobiterm-types";
 import { ExtensionCtx } from "./useExtensionContext";
 
 interface ExtensionProviderProps {

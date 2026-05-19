@@ -8,7 +8,7 @@ import {
 } from "./buttons";
 import { TextInput } from "./TextInput";
 import { ExtensionSlot } from "./extensions/ExtensionSlot";
-import { ExtensionSlot as Slot } from "./extensions/types";
+import { ExtensionSlot as Slot } from "@lampstand-labs/mobiterm-types";
 import { useExtensionContext } from "./extensions/useExtensionContext";
 
 const ARROWS = {

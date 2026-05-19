@@ -8,6 +8,9 @@
     "url": "git+https://github.com/lampstand-labs/mobiterm.git"
   },
   "type": "module",
+  "workspaces": [
+    "packages/mobiterm-types"
+  ],
   "bin": {
     "mobiterm": "scripts/install.cjs"
   },
@@ -26,6 +29,7 @@
     "detect-libc": "^2.1.2"
   },
   "devDependencies": {
+    "@lampstand-labs/mobiterm-types": "workspace:*",
     "@types/bun": "latest",
     "@types/react": "^19",
     "@types/react-dom": "^19",

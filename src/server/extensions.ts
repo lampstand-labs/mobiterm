@@ -1,26 +1,5 @@
 import path from "path";
-
-type HTTPMethod =
-  | "GET"
-  | "POST"
-  | "PUT"
-  | "DELETE"
-  | "PATCH"
-  | "HEAD"
-  | "OPTIONS";
-
-/**
- * Extension routes merged into Bun.serve().
- * @example
- * {
- *   "/api/hello": { GET: () => Response.json({ msg: "hello" }) },
- *   "/api/data":  { POST: (req) => req.json().then((d) => Response.json(d)) },
- * }
- */
-type ServerRoutes = Record<
-  string,
-  Partial<Record<HTTPMethod, (req: Request) => Response | Promise<Response>>>
->;
+import type { ServerRoutes } from "@lampstand-labs/mobiterm-types";
 
 const serverRoutes = new Map<string, ServerRoutes>();
 

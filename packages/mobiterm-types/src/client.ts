@@ -1,7 +1,10 @@
 import type { ComponentType, ReactNode } from "react";
-import type { TerminalHandle } from "../Terminal";
 
-export type SlotProps = TerminalHandle;
+export interface SlotProps {
+  send: (data: string) => void;
+  fit: () => void;
+  focus: () => void;
+}
 
 export enum ExtensionSlot {
   ToolbarAbove = "toolbar-above",
