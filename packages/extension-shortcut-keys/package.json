@@ -1,0 +1,11 @@
+{
+  "name": "@lampstand-labs/mobiterm-shortcut-keys",
+  "version": "0.1.0",
+  "license": "MIT",
+  "dependencies": {
+    "@lampstand-labs/mobiterm-types": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "^19"
+  }
+}

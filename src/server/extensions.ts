@@ -2,7 +2,6 @@ import path from "path";
 import type { ServerRoutes } from "@lampstand-labs/mobiterm-types";
 
 const serverRoutes = new Map<string, ServerRoutes>();
-
 const clientBundles = new Map<string, Uint8Array>();
 
 export async function loadExtensions(dirs: string[]): Promise<void> {
@@ -34,12 +33,20 @@ async function loadSingleExtension(id: string, dirPath: string): Promise<void> {
   if (await clientFile.exists()) {
     const result = await Bun.build({
       entrypoints: [clientPath],
-      external: ["react", "react-dom"],
+      external: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "@mobiterm/shared-ui",
+      ],
       format: "esm",
     });
     if (result.success && result.outputs.length > 0) {
-      const artifact = result.outputs[0]!;
-      clientBundles.set(id, await artifact.bytes());
+      clientBundles.set(
+        id,
+        new Uint8Array(await result.outputs[0]!.arrayBuffer()),
+      );
     } else {
       console.warn(`[extensions] Client build failed for "${id}"`);
     }

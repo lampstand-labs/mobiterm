@@ -12,6 +12,7 @@
       name="description"
       content="A mobile-first web terminal for remote access from any device."
     />
+    <link rel="stylesheet" href="/styles.css" />
     <link rel="icon" type="image/svg+xml" href="./assets/icon.svg" size="any" />
     <link
       rel="apple-touch-icon"
@@ -25,6 +26,18 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="importmap">
+      {
+        "imports": {
+          "@mobiterm/shared-ui": "/shared/ui.js",
+          "react": "/vendor/react.js",
+          "react/jsx-dev-runtime": "/vendor/react-jsx-dev-runtime.js",
+          "react/jsx-runtime": "/vendor/react-jsx-runtime.js",
+          "react-dom": "/vendor/react-dom.js",
+          "react-dom/client": "/vendor/react-dom-client.js"
+        }
+      }
+    </script>
     <script type="module">
       // Bootstrap: discover and load extension client bundles
       window.__mobiterm_extensions = {
@@ -47,6 +60,6 @@
         // No extensions or failed to load — proceed with core
       }
     </script>
-    <script type="module" src="./frontend.tsx"></script>
+    <script type="module" src="/frontend.js"></script>
   </body>
 </html>
