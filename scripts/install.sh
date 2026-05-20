@@ -51,6 +51,7 @@ else
   exit 1
 fi
 
+mkdir -p "$BINDIR"
 install /tmp/mobiterm "$BINDIR/mobiterm"
 rm -f /tmp/mobiterm
 
