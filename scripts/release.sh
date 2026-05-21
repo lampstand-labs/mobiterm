@@ -30,7 +30,7 @@ done
 echo "==> Packaging binaries..."
 for dir in out/mobiterm-*/; do
   name=$(basename "$dir")
-  tar -czf "out/$name.tar.gz" -C "out/$dir" mobiterm
+  tar -czf "out/$name.tar.gz" -C "$dir" mobiterm
 done
 
 # Package sourcemaps (deduplicate chunk map)
