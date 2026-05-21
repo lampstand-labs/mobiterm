@@ -2,6 +2,16 @@
   "name": "@lampstand-labs/mobiterm",
   "version": "0.1.0",
   "description": "A mobile-first web terminal for remote access from any device.",
+  "keywords": [
+    "terminal",
+    "ssh",
+    "mobile",
+    "xterm",
+    "tty",
+    "remote-access",
+    "web-shell",
+    "web-push"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
