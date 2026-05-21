@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import {
   StandardButton,
@@ -64,30 +64,6 @@ export const ToolBar = memo(function ToolBar({
     fitTerminal();
   }, [showExtra]);
 
-  const handleEsc = useCallback(
-    () => onStandardClick("\x1b"),
-    [onStandardClick],
-  );
-  const handleTab = useCallback(() => onStandardClick("\t"), [onStandardClick]);
-  const handleShiftTab = useCallback(
-    () => onStandardClick("\x1b[Z"),
-    [onStandardClick],
-  );
-  const handleSpace = useCallback(
-    () => onStandardClick(" "),
-    [onStandardClick],
-  );
-  const handleCtrlC = useCallback(
-    () => onStandardClick("\x03"),
-    [onStandardClick],
-  );
-  const handleEnter = useCallback(
-    () => onStandardClick("\r"),
-    [onStandardClick],
-  );
-  const handleToggleInput = useCallback(() => setShowInput((v) => !v), []);
-  const handleToggleExtra = useCallback(() => setShowExtra((v) => !v), []);
-
   return (
     <>
       {showInput && (
@@ -95,15 +71,19 @@ export const ToolBar = memo(function ToolBar({
       )}
       {showExtra && (
         <div className="button-bar">
-          <StandardButton label="S+Tab" onClick={handleShiftTab} />
-          <StandardButton label="Space" onClick={handleSpace} />
-          <StandardButton label="^C" onClick={handleCtrlC} />
-          <StandardButton label="↵" onClick={handleEnter} />
+          <StandardButton
+            label="S+Tab"
+            data="\x1b[Z"
+            onClick={onStandardClick}
+          />
+          <StandardButton label="Space" data=" " onClick={onStandardClick} />
+          <StandardButton label="^C" data="\x03" onClick={onStandardClick} />
+          <StandardButton label="↵" data="\r" onClick={onStandardClick} />
         </div>
       )}
       <div className="button-bar">
-        <StandardButton label="Esc" onClick={handleEsc} />
-        <StandardButton label="Tab" onClick={handleTab} />
+        <StandardButton label="Esc" data="\x1b" onClick={onStandardClick} />
+        <StandardButton label="Tab" data="\t" onClick={onStandardClick} />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
@@ -118,7 +98,7 @@ export const ToolBar = memo(function ToolBar({
         <ToggleButton
           label="Aa"
           isActive={showInput}
-          onClick={handleToggleInput}
+          onClick={() => setShowInput((v) => !v)}
         />
         {hasTmux && (
           <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
@@ -126,7 +106,7 @@ export const ToolBar = memo(function ToolBar({
         <ToggleButton
           label="…"
           isActive={showExtra}
-          onClick={handleToggleExtra}
+          onClick={() => setShowExtra((v) => !v)}
         />
       </div>
     </>

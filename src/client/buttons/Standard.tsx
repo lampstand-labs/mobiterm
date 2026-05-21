@@ -3,11 +3,13 @@ import type { PointerEvent } from "react";
 
 interface StandardButtonProps {
   label: string;
-  onClick: () => void;
+  data: string;
+  onClick: (data: string) => void;
 }
 
 export const StandardButton = memo(function StandardButton({
   label,
+  data,
   onClick,
 }: StandardButtonProps) {
   const handlePointerDown = (e: PointerEvent) => {
@@ -15,7 +17,7 @@ export const StandardButton = memo(function StandardButton({
   };
 
   return (
-    <button onPointerDown={handlePointerDown} onClick={onClick}>
+    <button onPointerDown={handlePointerDown} onClick={() => onClick(data)}>
       {label}
     </button>
   );
