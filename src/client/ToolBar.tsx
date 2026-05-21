@@ -27,7 +27,6 @@ interface ToolBarProps {
   onCtrlHoldChange?: (isHeld: boolean) => void;
   fitTerminal: () => void;
   focusTerminal: () => void;
-  hasTmux: boolean;
 }
 
 export const ToolBar = memo(function ToolBar({
@@ -37,11 +36,21 @@ export const ToolBar = memo(function ToolBar({
   onCtrlHoldChange,
   fitTerminal,
   focusTerminal,
-  hasTmux,
 }: ToolBarProps) {
+  const [hasTmux, setHasTmux] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
   const prevShowInput = useRef(showInput);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await fetch("/api/hasTmux");
+        const d = await r.json();
+        setHasTmux(d.hasTmux);
+      } catch {}
+    })();
+  }, []);
 
   useEffect(() => {
     if (prevShowInput.current && !showInput) {
