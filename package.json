@@ -1,6 +1,6 @@
 {
   "name": "@lampstand-labs/mobiterm",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A mobile-first web terminal for remote access from any device.",
   "keywords": [
     "terminal",
