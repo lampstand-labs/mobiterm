@@ -58,9 +58,10 @@ for dir in packages/*/; do
 done
 
 echo "==> Bumping version to $VERSION..."
-npm version "$VERSION" --no-git-tag-version
+echo "mobiterm@$(npm version "$VERSION" --no-git-tag-version)"
 for dir in packages/*/; do
-  (cd "$dir" && npm version "$VERSION" --no-git-tag-version)
+  name=$(basename "$dir")
+  echo "$name@$(cd "$dir" && npm version "$VERSION" --no-git-tag-version)"
 done
 
 echo "==> Publishing platform packages..."
