@@ -17,14 +17,14 @@ export async function doSubscribe(
   const existing = await registration.pushManager.getSubscription();
   if (existing) return existing;
 
-  const res = await fetch("/vapidPublicKey");
+  const res = await fetch("/api/vapidPublicKey");
   const { publicKey } = await res.json();
   const sub = await registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: publicKey,
   });
 
-  await fetch("/subscribe", {
+  await fetch("/api/subscribe", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ subscription: sub }),
@@ -42,7 +42,7 @@ async function doUnsubscribe(
   await sub.unsubscribe();
 
   try {
-    await fetch("/unsubscribe", {
+    await fetch("/api/unsubscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ subscription: sub }),

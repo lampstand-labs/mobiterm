@@ -153,11 +153,11 @@ export function createPushRoutes(
   }
 
   return {
-    "/vapidPublicKey": {
+    "/api/vapidPublicKey": {
       GET: () => Response.json({ publicKey }),
     },
 
-    "/subscribe": {
+    "/api/subscribe": {
       POST: async (req) => {
         try {
           const { subscription } = (await req.json()) as SubscribeBody;
@@ -188,7 +188,7 @@ export function createPushRoutes(
             { status: 201 },
           );
         } catch (error: any) {
-          console.error("Error in /subscribe:", error);
+          console.error("Error in /api/subscribe:", error);
           return Response.json(
             { error: "Failed to save subscription" },
             { status: 500 },
@@ -197,7 +197,7 @@ export function createPushRoutes(
       },
     },
 
-    "/sendNotification": {
+    "/api/sendNotification": {
       POST: async (req) => {
         try {
           const {
@@ -252,7 +252,7 @@ export function createPushRoutes(
             results,
           });
         } catch (error: any) {
-          console.error("Error in /sendNotification:", error);
+          console.error("Error in /api/sendNotification:", error);
           return Response.json(
             { error: "Failed to send notifications" },
             { status: 500 },
@@ -261,7 +261,7 @@ export function createPushRoutes(
       },
     },
 
-    "/unsubscribe": {
+    "/api/unsubscribe": {
       POST: async (req) => {
         try {
           const { subscription } = (await req.json()) as UnsubscribeBody;
@@ -290,7 +290,7 @@ export function createPushRoutes(
             totalSubscriptions: count,
           });
         } catch (error: any) {
-          console.error("Error in /unsubscribe:", error);
+          console.error("Error in /api/unsubscribe:", error);
           return Response.json(
             { error: "Failed to remove subscription" },
             { status: 500 },
@@ -299,7 +299,7 @@ export function createPushRoutes(
       },
     },
 
-    "/health": {
+    "/api/health": {
       GET: () => {
         try {
           const { count } = db.subscriptions.count.get() as CountResult;
