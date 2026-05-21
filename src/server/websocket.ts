@@ -40,7 +40,7 @@ export const websocket = {
     const cmd = ws.data.hasTmux
       ? [
           "tmux", "-u", "-L", "mobiterm",
-          "set-option", "-g", "default-terminal", getBestTerminalProfile(),
+          "set-option", "-s", "default-terminal", getBestTerminalProfile(),
           ";",
           "new", "-A", "-s", ws.data.identifier, shell,
           ";",
