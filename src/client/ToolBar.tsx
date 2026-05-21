@@ -7,6 +7,7 @@ import {
   ToggleButton,
 } from "./buttons";
 import { TextInput } from "./TextInput";
+import type { TerminalHandle } from "./Terminal";
 
 const ARROWS = {
   up: { char: "↑", seq: "\x1b[A" },
@@ -21,21 +22,17 @@ const TMUX_ARROWS = {
 };
 
 interface ToolBarProps {
-  onStandardClick: (data: string) => void;
+  terminalHandler: TerminalHandle;
   setActiveCtrl: Dispatch<SetStateAction<boolean>>;
   isActiveCtrl: boolean;
   onCtrlHoldChange?: (isHeld: boolean) => void;
-  fitTerminal: () => void;
-  focusTerminal: () => void;
 }
 
 export const ToolBar = memo(function ToolBar({
-  onStandardClick,
+  terminalHandler,
   setActiveCtrl,
   isActiveCtrl,
   onCtrlHoldChange,
-  fitTerminal,
-  focusTerminal,
 }: ToolBarProps) {
   const [hasTmux, setHasTmux] = useState(false);
   const [showInput, setShowInput] = useState(false);
@@ -54,36 +51,51 @@ export const ToolBar = memo(function ToolBar({
 
   useEffect(() => {
     if (prevShowInput.current && !showInput) {
-      focusTerminal();
-      fitTerminal();
+      terminalHandler.focus();
+      terminalHandler.fit();
     }
     prevShowInput.current = showInput;
   }, [showInput]);
 
   useEffect(() => {
-    fitTerminal();
+    terminalHandler.fit();
   }, [showExtra]);
 
   return (
     <>
       {showInput && (
-        <TextInput onSend={onStandardClick} fitTerminal={fitTerminal} />
+        <TextInput
+          onSend={terminalHandler.send}
+          fitTerminal={terminalHandler.fit}
+        />
       )}
       {showExtra && (
         <div className="button-bar">
           <StandardButton
             label="S+Tab"
             data="\x1b[Z"
-            onClick={onStandardClick}
+            onClick={terminalHandler.send}
           />
-          <StandardButton label="Space" data=" " onClick={onStandardClick} />
-          <StandardButton label="^C" data="\x03" onClick={onStandardClick} />
-          <StandardButton label="↵" data="\r" onClick={onStandardClick} />
+          <StandardButton
+            label="Space"
+            data=" "
+            onClick={terminalHandler.send}
+          />
+          <StandardButton
+            label="^C"
+            data="\x03"
+            onClick={terminalHandler.send}
+          />
+          <StandardButton label="↵" data="\r" onClick={terminalHandler.send} />
         </div>
       )}
       <div className="button-bar">
-        <StandardButton label="Esc" data="\x1b" onClick={onStandardClick} />
-        <StandardButton label="Tab" data="\t" onClick={onStandardClick} />
+        <StandardButton
+          label="Esc"
+          data="\x1b"
+          onClick={terminalHandler.send}
+        />
+        <StandardButton label="Tab" data="\t" onClick={terminalHandler.send} />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
@@ -91,7 +103,7 @@ export const ToolBar = memo(function ToolBar({
           onHoldChange={onCtrlHoldChange}
         />
         <ArrowButton
-          onArrow={onStandardClick}
+          onArrow={terminalHandler.send}
           arrows={ARROWS}
           repeatEnabled={true}
         />
@@ -101,7 +113,7 @@ export const ToolBar = memo(function ToolBar({
           onClick={() => setShowInput((v) => !v)}
         />
         {hasTmux && (
-          <ArrowButton onArrow={onStandardClick} arrows={TMUX_ARROWS} />
+          <ArrowButton onArrow={terminalHandler.send} arrows={TMUX_ARROWS} />
         )}
         <ToggleButton
           label="…"

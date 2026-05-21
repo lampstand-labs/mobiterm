@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
@@ -13,17 +13,20 @@ export function App() {
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
 
-  const standardHandler = useCallback((data: string) => {
-    terminalRef.current?.send(data);
-  }, []);
-
-  const fitTerminal = useCallback(() => {
-    terminalRef.current?.fit();
-  }, []);
-
-  const focusTerminal = useCallback(() => {
-    terminalRef.current?.focus();
-  }, []);
+  const terminalHandler = useMemo<TerminalHandle>(
+    () => ({
+      send(data) {
+        terminalRef.current?.send(data);
+      },
+      fit() {
+        terminalRef.current?.fit();
+      },
+      focus() {
+        terminalRef.current?.focus();
+      },
+    }),
+    [],
+  );
 
   return (
     <div
@@ -42,12 +45,10 @@ export function App() {
         isCtrlHeld={isCtrlHeld}
       />
       <ToolBar
-        onStandardClick={standardHandler}
+        terminalHandler={terminalHandler}
         setActiveCtrl={setLatchedCtrl}
         isActiveCtrl={isLatchedCtrl}
         onCtrlHoldChange={setCtrlHeld}
-        fitTerminal={fitTerminal}
-        focusTerminal={focusTerminal}
       />
     </div>
   );
