@@ -1,17 +1,26 @@
 import "./index.css";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { Terminal } from "./Terminal";
 import type { TerminalHandle } from "./Terminal";
 import { ToolBar } from "./ToolBar";
 import { useVisualViewport } from "./useVisualViewport";
 import { PushBanner } from "./PushBanner";
+import { setPendingFocusPane } from "./useWebSocket";
 
 export function App() {
   const { viewportHeight, isDockedKeyboardVisible } = useVisualViewport();
   const terminalRef = useRef<TerminalHandle | null>(null);
   const [isLatchedCtrl, setLatchedCtrl] = useState(false);
   const [isCtrlHeld, setCtrlHeld] = useState(false);
+
+  useEffect(() => {
+    const pane = new URLSearchParams(location.search).get("focusTmuxPane");
+    if (pane) {
+      setPendingFocusPane(pane);
+      history.replaceState(null, "", "/");
+    }
+  }, []);
 
   const terminalHandler = useMemo<TerminalHandle>(
     () => ({

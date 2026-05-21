@@ -4,6 +4,20 @@ import type { Terminal as XTerm } from "@xterm/xterm";
 import type { FitAddon } from "@xterm/addon-fit";
 import { AttachAddon } from "@xterm/addon-attach";
 
+let pendingFocusPane: string | null = null;
+
+export function setPendingFocusPane(pane: string) {
+  pendingFocusPane = pane;
+}
+
+function flushPendingFocusPane(send: (data: string) => void) {
+  if (!pendingFocusPane) return;
+  const pane = pendingFocusPane;
+  pendingFocusPane = null;
+  send(`\x02:`);
+  setTimeout(() => send(`switch-client -t ${pane}\r`), 50);
+}
+
 export function useWebSocket(
   terminalRef: RefObject<XTerm | null>,
   fitAddonRef: RefObject<FitAddon | null>,
@@ -66,6 +80,7 @@ export function useWebSocket(
               wsRef.current!.send(`\x1b[RESIZE:${cols};${rows}]`);
             }
           }
+          flushPendingFocusPane((data) => wsRef.current!.send(data));
         }
       };
 
