@@ -1,8 +1,11 @@
 import arg from "arg";
+import pkg from "../../package.json";
 
 const spec = {
   "--help": Boolean,
   "-h": "--help",
+  "--version": Boolean,
+  "-v": "--version",
   "--vapid-contact": String,
   "-c": "--vapid-contact",
   "--port": String,
@@ -27,6 +30,7 @@ function printHelp(): void {
     "  -p, --port <number>                Port to listen on (default: 7130)",
   );
   console.log("  -h, --help                         Show this help message");
+  console.log("  -v, --version                      Show version number");
 }
 
 export function parseArgs(): {
@@ -35,6 +39,11 @@ export function parseArgs(): {
   port?: number;
 } {
   const args = arg(spec);
+
+  if (args["--version"]) {
+    console.log(`${pkg.name} ${pkg.version}`);
+    process.exit(0);
+  }
 
   if (args["--help"]) {
     printHelp();
