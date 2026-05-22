@@ -1,6 +1,6 @@
 {
   "name": "@lampstand-labs/mobiterm-linux-x64-gnu",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The Linux x64 GLIBC binary for mobiterm.",
   "license": "MIT",
   "repository": {
