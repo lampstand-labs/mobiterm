@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PUBLISH=false
+if [ $# -eq 2 ] && [ "$2" = "--publish" ]; then
+  PUBLISH=true
+  set -- "$1"
+fi
+
 if [ $# -ne 1 ]; then
-  echo "Usage: $0 <version>"
+  echo "Usage: $0 <version> [--publish]"
   echo "Example: $0 0.2.0"
+  echo "  --publish  Actually publish to npm (otherwise dry-run)"
   exit 1
 fi
 
@@ -66,14 +73,21 @@ done
 
 echo "==> Publishing platform packages..."
 for dir in packages/*/; do
-  npm publish --access public "$dir" --dry-run
+  if [ "$PUBLISH" = true ]; then
+    npm publish --access public "$dir" --provenance
+  else
+    npm publish --access public "$dir" --dry-run
+  fi
 done
 
-echo ""
-echo "==> Dry run complete. Review the output above."
-echo ""
-echo "To publish for real, run:"
-echo "  for dir in packages/*/; do npm publish --access public \"\$dir\"; done"
-echo "  npm publish --access public"
-echo ""
-echo "Then: git add -A && git commit -m \"v$VERSION\" && git tag \"v$VERSION\" && git push && git push --tags"
+if [ "$PUBLISH" = true ]; then
+  npm publish --access public --provenance
+else
+  npm publish --access public --dry-run
+  echo ""
+  echo "==> Dry run complete. Review the output above."
+  echo ""
+  echo "To publish for real, use: bash scripts/release.sh $VERSION --publish"
+  echo ""
+  echo "Then: git add -A && git commit -m \"v$VERSION\" && git tag \"v$VERSION\" && git push && git push --tags"
+fi

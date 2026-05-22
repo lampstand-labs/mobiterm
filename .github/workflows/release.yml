@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release (e.g. 0.3.0)"
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Build, package, and publish to npm
+        run: bash scripts/release.sh "${{ inputs.version }}" --publish
+
+      - name: Commit version bumps and tag
+        run: |
+          git config user.name "mobiterm-bot"
+          git config user.email "bot@lampstand.labs"
+          git remote set-url origin \
+            https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}
+          git add package.json packages/*/package.json
+          git commit -m "v${{ inputs.version }}"
+          git tag "v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"
+
+      - name: Extract changelog entry
+        id: changelog
+        run: |
+          awk -v ver="${{ inputs.version }}" '
+            $0 ~ "^## v" ver "$" { found=1; next }
+            found && /^## v/ { exit }
+            found { print }
+          ' CHANGELOG.md > /tmp/release_body.md
+          if [ ! -s /tmp/release_body.md ]; then
+            echo "::warning::No changelog entry found for v${{ inputs.version }}"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ inputs.version }}
+          files: out/*.tar.gz
+          body_path: /tmp/release_body.md
+
+      - name: Update Homebrew formula
+        run: |
+          git clone \
+            https://x-access-token:${{ secrets.HOMEBREW_TAP_TOKEN }}@github.com/lampstand-labs/homebrew-tap.git \
+            /tmp/homebrew-tap
+
+          cd /tmp/homebrew-tap
+
+          sed -i 's/version "[0-9.]*"/version "'"${{ inputs.version }}"'"/' mobiterm.rb
+          sed -i "s|/v[0-9.]*/mobiterm-|/v${{ inputs.version }}/mobiterm-|g" mobiterm.rb
+
+          for tarball in "$GITHUB_WORKSPACE"/out/mobiterm-*.tar.gz; do
+            name=$(basename "$tarball" .tar.gz)
+            sha=$(sha256sum "$tarball" | awk '{print $1}')
+            sed -i "/${name//\//\\/}\.tar.gz\"/{n;s/sha256 \"[a-f0-9]*\"/sha256 \"$sha\"/;}" mobiterm.rb
+          done
+
+          git config user.name "mobiterm-bot"
+          git config user.email "bot@lampstand.labs"
+          git add mobiterm.rb
+          git diff --cached --quiet || {
+            git commit -m "mobiterm v${{ inputs.version }}"
+            git push
+          }
