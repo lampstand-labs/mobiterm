@@ -73,7 +73,7 @@ export const ToolBar = memo(function ToolBar({
         <div className="button-bar">
           <StandardButton
             label="S+Tab"
-            data="\x1b[Z"
+            data={"\x1b[Z"}
             onClick={terminalHandler.send}
           />
           <StandardButton
@@ -83,19 +83,27 @@ export const ToolBar = memo(function ToolBar({
           />
           <StandardButton
             label="^C"
-            data="\x03"
+            data={"\x03"}
             onClick={terminalHandler.send}
           />
-          <StandardButton label="↵" data="\r" onClick={terminalHandler.send} />
+          <StandardButton
+            label="↵"
+            data={"\r"}
+            onClick={terminalHandler.send}
+          />
         </div>
       )}
       <div className="button-bar">
         <StandardButton
           label="Esc"
-          data="\x1b"
+          data={"\x1b"}
           onClick={terminalHandler.send}
         />
-        <StandardButton label="Tab" data="\t" onClick={terminalHandler.send} />
+        <StandardButton
+          label="Tab"
+          data={"\t"}
+          onClick={terminalHandler.send}
+        />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
