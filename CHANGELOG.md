@@ -3,22 +3,27 @@
 ## v0.2.0
 
 ### Breaking Changes
+
 - Push notification endpoints (`subscribe`, `unsubscribe`, `send`) now mounted under `/api/` prefix
 
 ### New Features
+
 - Focus a specific tmux pane from push notification data via the `tmuxPane` field
 
 ### Refactors
+
 - Consolidated `standardHandler`, `fitTerminal`, and `focusTerminal` into a single `terminalHandler` object
 - Removed all `useCallback` wrappers from `ToolBar`
 - Moved `hasTmux` fetch from `App` to `ToolBar`
 
 ### Fixes
+
 - Top padding hidden on iPad after resize
 - tmux `default-terminal` now uses `-s` (server option) instead of `-g`
 - Fixed default port in README
 
 ### Build
+
 - Consolidated build and release scripts
 - `install.sh` now creates target directory if missing
 - Added keywords to `package.json`
@@ -29,6 +34,7 @@
 Initial release.
 
 ### Features
+
 - WebSocket-based PTY with xterm.js frontend
 - tmux integration (auto-attaches to `tmux -L mobiterm new -A -s <identifier>`)
 - Falls back to user's `$SHELL` when tmux is not installed
@@ -43,6 +49,7 @@ Initial release.
 - Web push notifications with VAPID key auto-generation
 
 ### Build
+
 - Cross-platform release script
 - npm publish setup
 - Install script for end users
