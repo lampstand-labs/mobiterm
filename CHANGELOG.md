@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.1
+
+### Fixes
+
+- Escape sequences in toolbar buttons no longer mangled by the bundler — Esc, Tab, ^C, and other control characters now send the correct terminal codes
+
+### Build
+
+- Added GitHub Actions release workflow with npm trusted publishing and Homebrew formula auto-update
+
 ## v0.2.0
 
 ### Breaking Changes
