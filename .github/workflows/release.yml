@@ -19,6 +19,8 @@ jobs:
         with:
           fetch-tags: true
 
+      - uses: actions/setup-node@v4
+
       - uses: oven-sh/setup-bun@v2
 
       - run: bun install
