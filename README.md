@@ -8,6 +8,23 @@
 </p>
 
 <p align="center">
+  <table>
+    <tr>
+      <td><img width="150" alt="scrolling" src="https://github.com/user-attachments/assets/6437ef00-fc7f-484a-bd64-34505c793a9b" /></td>
+      <td><img width="150" alt="copy" src="https://github.com/user-attachments/assets/9b9d4582-df54-4951-909c-4549ba98f862" /></td>
+      <td><img width="150" alt="paste" src="https://github.com/user-attachments/assets/39afc05a-5903-497b-b4f9-31c5fa27fa78" /></td>
+      <td><img width="150" alt="push notification" src="https://github.com/user-attachments/assets/f3b93565-e035-41af-ab12-35f9a56f0964" /></td>
+    </tr>
+    <tr>
+      <td align="center">Scroll</td>
+      <td align="center">Copy</td>
+      <td align="center">Paste</td>
+      <td align="center">Push Notification</td>
+    </tr>
+  </table>
+</p>
+
+<p align="center">
   <a href="#-features">Features</a> •
   <a href="#-installation">Installation</a> •
   <a href="#-usage">Usage</a> •
