@@ -16,6 +16,16 @@ fi
 
 VERSION="$1"
 
+# Bump BEFORE building: the version is imported from package.json and inlined
+# into each compiled binary at build time, so building first would bake in the
+# previous release's version.
+echo "==> Bumping version to $VERSION..."
+echo "mobiterm@$(npm version "$VERSION" --no-git-tag-version)"
+for dir in packages/*/; do
+  name=$(basename "$dir")
+  echo "$name@$(cd "$dir" && npm version "$VERSION" --no-git-tag-version)"
+done
+
 echo "==> Building all binaries..."
 
 # --sourcemap embeds each sourcemap into the executable, so release binaries
@@ -52,13 +62,6 @@ for dir in packages/*/; do
   mkdir -p "$dir/bin"
   cp "out/$name/mobiterm" "$dir/bin/mobiterm"
   chmod +x "$dir/bin/mobiterm"
-done
-
-echo "==> Bumping version to $VERSION..."
-echo "mobiterm@$(npm version "$VERSION" --no-git-tag-version)"
-for dir in packages/*/; do
-  name=$(basename "$dir")
-  echo "$name@$(cd "$dir" && npm version "$VERSION" --no-git-tag-version)"
 done
 
 echo "==> Publishing platform packages..."
