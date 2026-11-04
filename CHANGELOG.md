@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.2.2
+
+### New Features
+
+- Added `--version` / `-v` CLI flag, printing the package name and version
+
+### Fixes
+
+- Soft keyboard no longer dismissed when tapping toolbar buttons on iOS 27
+- Top blur no longer misrendered on iOS 27
+
+### Docs
+
+- Expanded README with screenshots and reorganized installation, usage, and BYOT sections
+
+### Build
+
+- Version bump commit is now pushed alongside the release tag
+
 ## v0.2.1
 
 ### Fixes
