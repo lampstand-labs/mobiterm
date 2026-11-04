@@ -25,6 +25,7 @@ interface ToolBarProps {
   terminalHandler: TerminalHandle;
   setActiveCtrl: Dispatch<SetStateAction<boolean>>;
   isActiveCtrl: boolean;
+  isDockedKeyboardVisible: boolean;
   onCtrlHoldChange?: (isHeld: boolean) => void;
 }
 
@@ -32,12 +33,20 @@ export const ToolBar = memo(function ToolBar({
   terminalHandler,
   setActiveCtrl,
   isActiveCtrl,
+  isDockedKeyboardVisible,
   onCtrlHoldChange,
 }: ToolBarProps) {
   const [hasTmux, setHasTmux] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [showExtra, setShowExtra] = useState(false);
   const prevShowInput = useRef(showInput);
+
+  const preventKeyboardDismissal = () => {
+    // Prevent keyboard from dismissing on iOS 27
+    if (isDockedKeyboardVisible) {
+      terminalHandler.focus();
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -75,21 +84,25 @@ export const ToolBar = memo(function ToolBar({
             label="S+Tab"
             data={"\x1b[Z"}
             onClick={terminalHandler.send}
+            preventKeyboardDismissal={preventKeyboardDismissal}
           />
           <StandardButton
             label="Space"
             data=" "
             onClick={terminalHandler.send}
+            preventKeyboardDismissal={preventKeyboardDismissal}
           />
           <StandardButton
             label="^C"
             data={"\x03"}
             onClick={terminalHandler.send}
+            preventKeyboardDismissal={preventKeyboardDismissal}
           />
           <StandardButton
             label="↵"
             data={"\r"}
             onClick={terminalHandler.send}
+            preventKeyboardDismissal={preventKeyboardDismissal}
           />
         </div>
       )}
@@ -98,22 +111,26 @@ export const ToolBar = memo(function ToolBar({
           label="Esc"
           data={"\x1b"}
           onClick={terminalHandler.send}
+          preventKeyboardDismissal={preventKeyboardDismissal}
         />
         <StandardButton
           label="Tab"
           data={"\t"}
           onClick={terminalHandler.send}
+          preventKeyboardDismissal={preventKeyboardDismissal}
         />
         <LatchButton
           label="Ctrl"
           setActive={setActiveCtrl}
           isActive={isActiveCtrl}
           onHoldChange={onCtrlHoldChange}
+          preventKeyboardDismissal={preventKeyboardDismissal}
         />
         <ArrowButton
           onArrow={terminalHandler.send}
           arrows={ARROWS}
           repeatEnabled={true}
+          preventKeyboardDismissal={preventKeyboardDismissal}
         />
         <ToggleButton
           label="Aa"
@@ -121,12 +138,17 @@ export const ToolBar = memo(function ToolBar({
           onClick={() => setShowInput((v) => !v)}
         />
         {hasTmux && (
-          <ArrowButton onArrow={terminalHandler.send} arrows={TMUX_ARROWS} />
+          <ArrowButton
+            onArrow={terminalHandler.send}
+            arrows={TMUX_ARROWS}
+            preventKeyboardDismissal={preventKeyboardDismissal}
+          />
         )}
         <ToggleButton
           label="…"
           isActive={showExtra}
           onClick={() => setShowExtra((v) => !v)}
+          preventKeyboardDismissal={preventKeyboardDismissal}
         />
       </div>
     </>

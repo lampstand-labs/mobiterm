@@ -59,6 +59,7 @@ export function App() {
           terminalHandler={terminalHandler}
           setActiveCtrl={setLatchedCtrl}
           isActiveCtrl={isLatchedCtrl}
+          isDockedKeyboardVisible={isDockedKeyboardVisible}
           onCtrlHoldChange={setCtrlHeld}
         />
       </div>

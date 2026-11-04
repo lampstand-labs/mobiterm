@@ -18,12 +18,14 @@ interface ArrowButtonProps {
     left?: { char?: string; seq?: string };
     right?: { char?: string; seq?: string };
   };
+  preventKeyboardDismissal: () => void;
 }
 
 export const ArrowButton = memo(function ArrowButton({
   onArrow,
   repeatEnabled = false,
   arrows = {},
+  preventKeyboardDismissal,
 }: ArrowButtonProps) {
   const containerRef = useRef<HTMLButtonElement>(null);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
@@ -115,6 +117,7 @@ export const ArrowButton = memo(function ArrowButton({
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
+      onClick={preventKeyboardDismissal}
     >
       {/* Four overlay arrows */}
       {arrows.up?.char && (
