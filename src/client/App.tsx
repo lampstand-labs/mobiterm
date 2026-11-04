@@ -38,28 +38,31 @@ export function App() {
   );
 
   return (
-    <div
-      className="app"
-      style={{
-        height: `${viewportHeight}px`,
-        paddingBottom: isDockedKeyboardVisible ? 0 : undefined,
-      }}
-    >
-      <PushBanner />
-      <Terminal
-        ref={terminalRef}
-        viewportHeight={viewportHeight}
-        isLatchedCtrl={isLatchedCtrl}
-        setLatchedCtrl={setLatchedCtrl}
-        isCtrlHeld={isCtrlHeld}
-      />
-      <ToolBar
-        terminalHandler={terminalHandler}
-        setActiveCtrl={setLatchedCtrl}
-        isActiveCtrl={isLatchedCtrl}
-        onCtrlHoldChange={setCtrlHeld}
-      />
-    </div>
+    <>
+      <div className="status-bar-backdrop" aria-hidden="true" />
+      <div
+        className="app"
+        style={{
+          height: `${viewportHeight}px`,
+          paddingBottom: isDockedKeyboardVisible ? 0 : undefined,
+        }}
+      >
+        <PushBanner />
+        <Terminal
+          ref={terminalRef}
+          viewportHeight={viewportHeight}
+          isLatchedCtrl={isLatchedCtrl}
+          setLatchedCtrl={setLatchedCtrl}
+          isCtrlHeld={isCtrlHeld}
+        />
+        <ToolBar
+          terminalHandler={terminalHandler}
+          setActiveCtrl={setLatchedCtrl}
+          isActiveCtrl={isLatchedCtrl}
+          onCtrlHoldChange={setCtrlHeld}
+        />
+      </div>
+    </>
   );
 }
 

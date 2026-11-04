@@ -24,6 +24,36 @@ body,
   padding-right: env(safe-area-inset-right);
 }
 
+/*
+ * iOS 27 draws a system blur over the top of installed (standalone) PWAs.
+ * A fixed, solid element at the very top of the viewport makes iOS use that
+ * color for the status bar area instead of the blur. Requirements observed on
+ * device: position:fixed, top:0, height >= 6px, width >= 80% of the screen.
+ * Only shown in standalone mode so it can't overlap content in Safari.
+ */
+.status-bar-backdrop {
+  display: none;
+}
+
+@media (display-mode: standalone) {
+  .status-bar-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: max(env(safe-area-inset-top, 0px), 6px);
+    background: #1e1e1e;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Reserve the same space so the backdrop never covers terminal content. */
+  .app {
+    padding-top: max(env(safe-area-inset-top, 0px), 6px);
+  }
+}
+
 .container-terminal {
   flex: 1;
   min-height: 0;
