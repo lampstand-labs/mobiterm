@@ -6,7 +6,6 @@ interface LatchButtonProps {
   setActive: Dispatch<SetStateAction<boolean>>;
   isActive: boolean;
   onHoldChange?: (isHeld: boolean) => void;
-  preventKeyboardDismissal: () => void;
 }
 
 export const LatchButton = memo(function LatchButton({
@@ -14,7 +13,6 @@ export const LatchButton = memo(function LatchButton({
   setActive,
   isActive,
   onHoldChange,
-  preventKeyboardDismissal,
 }: LatchButtonProps) {
   const startRef = useRef<number | null>(null);
 
@@ -57,7 +55,6 @@ export const LatchButton = memo(function LatchButton({
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
-      onClick={preventKeyboardDismissal}
       className={isActive ? "toggle-active" : undefined}
     >
       {label}
