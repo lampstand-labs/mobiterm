@@ -18,6 +18,10 @@ VERSION="$1"
 
 echo "==> Building all binaries..."
 
+# --sourcemap embeds each sourcemap into the executable, so release binaries
+# symbolicate stack traces back to TypeScript on their own. Bun additionally
+# writes a sidecar map next to the output (index.js.map before 1.4, mobiterm.map
+# from 1.4 on); it is not needed at runtime and is not shipped.
 FLAGS="--compile --production --bytecode --sourcemap"
 
 TARGETS=(
@@ -31,6 +35,8 @@ TARGETS=(
 
 for target in "${TARGETS[@]}"; do
   IFS=: read -r triple dir < <(echo "$target")
+  # Drop stale output so sidecar maps from a previous Bun version can't linger.
+  rm -rf "out/$dir"
   bun build ./src/index.ts $FLAGS --target="$triple" --outfile "out/$dir/mobiterm"
 done
 
@@ -39,22 +45,6 @@ for dir in out/mobiterm-*/; do
   name=$(basename "$dir")
   tar -czf "out/$name.tar.gz" -C "$dir" mobiterm
 done
-
-# Package sourcemaps (deduplicate chunk map)
-mkdir -p out/.sm
-first_dir=
-for dir in out/mobiterm-*/; do
-  [[ "$dir" == out/.sm/ ]] && continue
-  name=$(basename "$dir")
-  mkdir -p "out/.sm/$name"
-  cp "${dir}index.js.map" "out/.sm/$name/"
-  if [ -z "$first_dir" ]; then
-    first_dir="$dir"
-  fi
-done
-cp "$first_dir"chunk-*.js.map out/.sm/
-tar -czf out/mobiterm-sourcemaps.tar.gz -C out/.sm .
-rm -rf out/.sm
 
 echo "==> Copying binaries to platform packages..."
 for dir in packages/*/; do

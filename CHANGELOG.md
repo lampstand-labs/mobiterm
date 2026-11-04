@@ -18,6 +18,7 @@
 ### Build
 
 - Version bump commit is now pushed alongside the release tag
+- Release binaries embed their sourcemaps, so the separate sourcemaps tarball is no longer published; stack traces resolve to the original TypeScript on their own
 
 ## v0.2.1
 
